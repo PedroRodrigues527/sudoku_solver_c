@@ -15,6 +15,9 @@ int sockfd;
 {
 	int n;
 	char sendline[MAXLINE], recvline[MAXLINE+1];
+	int acontecimento = 0;
+
+	printf("PRESS ENTER\n");
 
 	while (fgets(sendline, MAXLINE, fp) != NULL) {
 		
@@ -55,6 +58,8 @@ int sockfd;
 			printf("%s", line);
 			
 			fclose(the_file);
+
+			acontecimento = 0;
 		}
 		
 		n = readline(sockfd, recvline, MAXLINE);
@@ -66,6 +71,7 @@ int sockfd;
 		{
 			recvline[0] = 't';
 			recvline[1] = 'u';
+			acontecimento = 0;
 		}
 
 		/* Envia a string para stdout */
@@ -80,6 +86,17 @@ S_IWUSR);
 		//write(fd, "", 0);
 
 		close(fd);
+
+		switch (acontecimento)
+		{
+		case 0:
+			printf("MAINMENU\n");
+    		printf("1) Entrar no Sudoku\n");
+    		printf("2) Receber log\n\n");
+			break;
+		default:
+			break;
+		}
 	}
 	if (ferror(fp))
 		err_dump("str_cli: error reading file");
