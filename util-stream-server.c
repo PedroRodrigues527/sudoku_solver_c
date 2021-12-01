@@ -17,22 +17,8 @@ int sockfd;
 			return;
 		else if (n < 0)
 			err_dump("str_echo: readline error");
-		//line[n-1] = '\0';
-		//inc = atoi(line);
-
-		/* Le a segunda linha do socket: os caracteres
-		n = readline(sockfd, line, MAXLINE);
-		if (n == 0)
-			return;
-		else if (n < 0)
-			err_dump("str_echo: readline error");
-		
-		for(i=0; i<n-1; i++) {
-		  line[i] += inc;
-		}
-		*/
 		/* Manda linha de volta para o socket. n conta com
-		   o \0 da string, caso contrßrio perdia-se sempre 
+		   o \0 da string, caso contrï¿½rio perdia-se sempre 
 		   um caracter! */
 		if (writen(sockfd, line, n) != n)
 			err_dump("str_echo: writen error");
