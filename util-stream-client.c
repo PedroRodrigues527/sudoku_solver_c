@@ -45,8 +45,11 @@ int sockfd;
 				break;
 			}
 			*/
-			while(!feof(fp))
-    			fgets(line, MAXLINE, fp);
+			while(!feof(the_file))
+			{
+				
+    				fgets(line, MAXLINE, the_file);
+			}
 			
 			//print the line
 			printf("%s", line);
@@ -68,11 +71,13 @@ int sockfd;
 		/* Envia a string para stdout */
 		fputs(recvline, stdout);
 		
-		int fd = open("monitor", O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR);
-		File.AppendAllText("monitor", sendline); // escreve uma linha nova o input do cliente no ficheiro de texto
-		File.AppendAllText("monitor", recvline); // escreve uma linha nova o output no ficheiro de texto
-		//write(fd, sendline, strlen(sendline));
-		//write(fd, recvline, strlen(recvline));
+		int fd = open("monitor", O_WRONLY | O_CREAT | O_APPEND, S_IRUSR | 
+S_IWUSR);
+		//File.AppendAllText("monitor", sendline); // escreve uma linha nova o input do cliente no ficheiro de texto
+		//File.AppendAllText("monitor", recvline); // escreve uma linha nova o output no ficheiro de texto
+		write(fd, sendline, strlen(sendline));
+		write(fd, recvline, strlen(recvline));
+		//write(fd, "", 0);
 
 		close(fd);
 	}
