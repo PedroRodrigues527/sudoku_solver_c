@@ -14,10 +14,10 @@ FILE *fp;
 int sockfd;
 {
 	int n;
-	char sendline[MAXLINE], recvline[MAXLINE+1];
-	int acontecimento = 0;
+	char sendline[MAXLINE];//, recvline[MAXLINE+1];
+	int room = 0;
 
-	printf("PRESS ENTER\n");
+	printf("CARREGUE EM 'ENTER'\n\n");
 
 	while (fgets(sendline, MAXLINE, fp) != NULL) {
 		
@@ -28,68 +28,72 @@ int sockfd;
 		if (writen(sockfd, sendline, n) != n)
 			err_dump("str_cli: writen error on socket");
 		
-		/* Tenta ler string de sockfd. Note-se que tem de 
-		   terminar a string com \0 */
-		
-		if(sendline[0] == '2' && strlen(sendline) == 2)
-		{
-			FILE *the_file = fopen("monitor", "r");
-			if(the_file == NULL)
-			{
-				perror("Unable to open the file!");
-				exit(1);
-			}
-			char line[MAXLINE];
-			/*
-			while(fgets(line, sizeof(line), the_file))
-			{
-				//print the line
-				printf("%s", line);
-				break;
-			}
-			*/
-			while(!feof(the_file))
-			{
-				
-    				fgets(line, MAXLINE, the_file);
-			}
-			
-			//print the line
-			printf("%s", line);
-			
-			fclose(the_file);
-
-			acontecimento = 0;
-		}
-		
-		n = readline(sockfd, recvline, MAXLINE);
-
-		if (n<0)
-			err_dump("str_cli:readline error");
-		recvline[n] = 0;
-		if(recvline[0] == '1' && strlen(recvline) == 3)
-		{
-			recvline[0] = 't';
-			recvline[1] = 'u';
-			acontecimento = 0;
-		}
-
-		/* Envia a string para stdout */
-		fputs(recvline, stdout);
-		
-		int fd = open("monitor", O_WRONLY | O_CREAT | O_APPEND, S_IRUSR | S_IWUSR);
-		//File.AppendAllText("monitor", sendline); // escreve uma linha nova o input do cliente no ficheiro de texto
-		//File.AppendAllText("monitor", recvline); // escreve uma linha nova o output no ficheiro de texto
-		write(fd, sendline, strlen(sendline));
-		write(fd, recvline, strlen(recvline));
-		//write(fd, "", 0);
-
-		close(fd);
-
-		switch (acontecimento)
+		switch (room)
 		{
 		case 0:
-			printf("MAINMENU\n");
+			if(strlen(sendline) == 1)
+			{
+				room = 1;
+			}
+			else
+			{
+				room = 0;
+			}
+			break;
+		case 1:
+			if(sendline[0] == '2' && strlen(sendline) == 2)
+			{
+				FILE *the_file = fopen("monitor", "r");
+				if(the_file == NULL)
+				{
+					perror("Unable to open the file!");
+					exit(1);
+				}
+
+				char line[MAXLINE];
+				while(!feof(the_file))
+				{
+					
+					fgets(line, MAXLINE, the_file);
+				}
+
+				printf("Escolheu opcao 2...\n\n");
+				
+				//print the line
+				printf("%s", line);
+				
+				fclose(the_file);
+
+				room = 1;
+			}
+			else if(sendline[0] == '1' && strlen(sendline) == 2)
+			{
+				printf("Escolheu opcao 1...\n\n");
+				room = 1;
+			}
+			else
+			{
+				printf("Nao escolheu nenhuma das opcoes...\n\n");
+				room = 1;
+			}
+			break;
+		
+		default:
+			printf("Isto nao devia acontecer...\n\n");
+			break;
+		}
+		
+		int fd = open("monitor", O_WRONLY | O_CREAT | O_APPEND, S_IRUSR | S_IWUSR);
+		write(fd, sendline, strlen(sendline));
+		close(fd);
+
+		switch (room)
+		{
+		case 0:
+			printf("CARREGUE EM 'ENTER'\n\n");
+			break;
+		case 1:
+			printf("MENU PRINCIPAL\n");
     		printf("1) Entrar no Sudoku\n");
     		printf("2) Receber log\n\n");
 			break;
