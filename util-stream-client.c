@@ -15,7 +15,7 @@ int sockfd;
 {
 	int n;
 	char sendline[MAXLINE];//, recvline[MAXLINE+1];
-	int room = 0;
+	int room = 0; //Indica menu em que o cliente esta present
 
 	printf("CARREGUE EM 'ENTER'\n\n");
 
@@ -31,13 +31,13 @@ int sockfd;
 		switch (room)
 		{
 		case 0:
-			if(strlen(sendline) == 1)
+			if(strlen(sendline) == 1) //Se nao tem opcao
 			{
-				room = 1;
+				room = 1; //Se der apenas ENTER Mostra o menu ao utilizador
 			}
 			else
 			{
-				room = 0;
+				room = 0; //Volta à mensagem "CARREGUE EM 'ENTER'\n\n" caso o utilizador inserir mais do que o um carater exeto \0
 			}
 			break;
 		case 1:
@@ -51,6 +51,9 @@ int sockfd;
 				}
 
 				char line[MAXLINE];
+				//Percorre as linhas do ficheiro monitor.txt
+				//Cada linha é armazenada na variavel line
+				//Quando chegar à ultima linha é feito uma sobreposição do line, permitindo que apenas a ultima linha seja mostrada ao utilizador
 				while(!feof(the_file))
 				{
 					
