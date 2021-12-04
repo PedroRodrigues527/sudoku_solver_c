@@ -1,3 +1,3 @@
 # Operative-System-Unix
-Construido em GNU/Linux Debian
+Construido sobre GNU/Linux Debian
 Projeto Unidade Curricular Sistemas Operativos, Universidade da Madeira
