@@ -16,7 +16,7 @@ int sockfd;
 {
 	int n;
 	char sendline[MAXLINE];//, recvline[MAXLINE+1];
-	int room = 0; //Indica menu em que o cliente esta present
+	int room = 0; //Indica menu em que o cliente esta presente
 
 	printf("CARREGUE EM 'ENTER'\n\n");
 

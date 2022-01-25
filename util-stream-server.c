@@ -1,3 +1,5 @@
+#include <sudoku.h>
+
 #define MAXLINE 512
 
 /* Servidor do tipo socket stream.
@@ -22,6 +24,9 @@ int sockfd;
 		   um caracter! */
 		if (writen(sockfd, line, n) != n)
 			err_dump("str_echo: writen error");
-		printf("Cliente: %s", line);
+		
+		printf("Cliente %d: %s", getpid(), line);
+		
+		//sudoku verify
 	}
 }
