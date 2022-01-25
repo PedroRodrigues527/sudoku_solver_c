@@ -22,5 +22,6 @@ int sockfd;
 		   um caracter! */
 		if (writen(sockfd, line, n) != n)
 			err_dump("str_echo: writen error");
+		printf("Cliente: %s", line);
 	}
 }
