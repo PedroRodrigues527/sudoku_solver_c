@@ -54,6 +54,7 @@ int sockfd;
 				//Percorre as linhas do ficheiro monitor.txt
 				//Cada linha é armazenada na variavel line
 				//Quando chegar à ultima linha é feito uma sobreposição do line, permitindo que apenas a ultima linha seja mostrada ao utilizador
+				//mudar isto
 				while(!feof(the_file))
 				{
 					
