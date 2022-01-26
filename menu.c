@@ -59,7 +59,7 @@ char textuser[MAXLINE];
     case 0:
         if(strlen(textuser) == 1) //Se nao tem opcao
         {
-            strcat (sendline,"Indo ao Menu Principal..."); //Se der apenas ENTER Mostra o menu ao utilizador
+            strcat (sendline,"Indo ao Menu Principal...\0"); //Se der apenas ENTER Mostra o menu ao utilizador
         }
         else
         {
@@ -69,17 +69,17 @@ char textuser[MAXLINE];
     case 1:
         if(textuser[0] == '2' && strlen(textuser) == 2)
         {
-            strcat (sendline,"Escolheu opcao 2...");
+            strcat (sendline,"Escolheu opcao 2...\0");
             //print the line
             //strcat (sendline,sendline);
         }
         else if(textuser[0] == '1' && strlen(textuser) == 2)
         {
-            strcat (sendline,"Escolheu opcao 1...");
+            strcat (sendline,"Escolheu opcao 1...\0");
         }
         else
         {
-            strcat (sendline,"Nao escolheu nenhuma das opcoes...");
+            strcat (sendline,"Nao escolheu nenhuma das opcoes...\0");
         }
         break;
     case 2:
@@ -98,7 +98,7 @@ char textuser[MAXLINE];
             }
             else
             {
-                strcat (sendline,"Os valores inseridos são invalidos! Insere digitos de acordo com o formato pretendido.");
+                strcat (sendline,"Os valores inseridos são invalidos! Insere digitos de acordo com o formato pretendido.\0");
             }
         }
         else if(textuser[0] == 'F' && textuser[1] == 'F' && strlen(textuser) == 3)
@@ -107,11 +107,11 @@ char textuser[MAXLINE];
         }
         else
         {
-            strcat (sendline,"Formato/Opcao desconhecido(a)...");
+            strcat (sendline,"Formato/Opcao desconhecido(a)...\0");
         }
         break;
     default:
-        strcat (sendline,"Isto nao devia acontecer...");
+        strcat (sendline,"Isto nao devia acontecer...\0");
         break;
     }
     

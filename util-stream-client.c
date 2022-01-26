@@ -24,35 +24,27 @@ int sockfd;
 		
         /* Envia string para sockfd. Note-se que o \0 nao 
         	e enviado */
-		printf("1");
+		
 		char fullstring[MAXLINE];
 		sprintf(fullstring, "%d", room);
 		strcat(fullstring, sendline);
 		n = strlen(fullstring);
 		if (writen(sockfd, fullstring, n) != n)
 			err_dump("str_cli: writen error on socket");
-		printf("2");
-		/*
-		char roomstring[MAXLINE];
-		sprintf(roomstring, "%d",room);
-		fgets (sendline, MAXLINE, fp);
-		n = strlen(roomstring);
-		if (writen(sockfd, roomstring, n) != n)
-			err_dump("str_cli: writen error on socket");
-		*/
-		printf("3");
+		
+		//printf(fullstring);
+		
 		/* Tenta ler string de sockfd. Note-se que tem de 
 		   terminar a string com \0 */
-		printf("4");
-		/*
+		
 		n = readline(sockfd, recvline, MAXLINE);
 		if (n<0)
 			err_dump("str_cli:readline error");
 		recvline[n] = 0;
-		printf("5");
+		//printf("5");
 		/* Envia a string para stdout */
-		//printf("%s", recvline);
-		printf("6");
+		printf("%s", recvline);
+		
 		printf("\n\n");
 		room = updateRoom(room, sendline);
 		switch (room)
