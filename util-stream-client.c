@@ -38,12 +38,14 @@ int sockfd;
 		   terminar a string com \0 */
 		
 		n = readline(sockfd, recvline, MAXLINE);
+		printf("%d",n);
 		if (n<0)
 			err_dump("str_cli:readline error");
 		recvline[n] = 0;
 		//printf("5");
 		/* Envia a string para stdout */
-		printf("%s", recvline);
+		//printf("%s", recvline);
+		fputs(recvline, stdout);
 		
 		printf("\n\n");
 		room = updateRoom(room, sendline);

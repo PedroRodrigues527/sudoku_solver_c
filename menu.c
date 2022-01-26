@@ -53,38 +53,38 @@ char sendline[MAXLINE];
 char textuser[MAXLINE];
 {
     //char resultline[MAXLINE];
-    //strcpy (resultline,"");
+    strcpy(sendline, "");
     switch (room)
     {
     case 0:
-        if(strlen(textuser) == 1) //Se nao tem opcao
+        if(strlen(textuser) == 1-1) //Se nao tem opcao
         {
-            strcat (sendline,"Indo ao Menu Principal...\0"); //Se der apenas ENTER Mostra o menu ao utilizador
+            strcat (sendline,"Indo ao Menu Principal..."); //Se der apenas ENTER Mostra o menu ao utilizador
         }
         else
         {
-            strcat (sendline," ... \0"); //Volta à mensagem "CARREGUE EM 'ENTER'\n\n" caso o utilizador inserir mais do que o um carater exeto \0
+            strcat (sendline,"..."); //Volta à mensagem "CARREGUE EM 'ENTER'\n\n" caso o utilizador inserir mais do que o um carater exeto \0
         }
         break;
     case 1:
-        if(textuser[0] == '2' && strlen(textuser) == 2)
+        if(textuser[0] == '2' && strlen(textuser) == 2-1)
         {
-            strcat (sendline,"Escolheu opcao 2...\0");
+            strcat (sendline,"Escolheu opcao 2...");
             //print the line
             //strcat (sendline,sendline);
         }
-        else if(textuser[0] == '1' && strlen(textuser) == 2)
+        else if(textuser[0] == '1' && strlen(textuser) == 2-1)
         {
-            strcat (sendline,"Escolheu opcao 1...\0");
+            strcat (sendline,"Escolheu opcao 1...");
         }
         else
         {
-            strcat (sendline,"Nao escolheu nenhuma das opcoes...\0");
+            strcat (sendline,"Nao escolheu nenhuma das opcoes...");
         }
         break;
     case 2:
         //1x1 1
-        if(textuser[1] == 'x' && textuser[3] == ' ' && strlen(textuser) == 6)
+        if(textuser[1] == 'x' && textuser[3] == ' ' && strlen(textuser) == 6-1)
         {
             if(isdigit(textuser[0]) && isdigit(textuser[2]) && isdigit(textuser[4]) && textuser[0] != 0 && textuser[2] != 0 && textuser[4] != 0)
             {
@@ -98,20 +98,20 @@ char textuser[MAXLINE];
             }
             else
             {
-                strcat (sendline,"Os valores inseridos são invalidos! Insere digitos de acordo com o formato pretendido.\0");
+                strcat (sendline,"Os valores inseridos são invalidos! Insere digitos de acordo com o formato pretendido...");
             }
         }
-        else if(textuser[0] == 'F' && textuser[1] == 'F' && strlen(textuser) == 3)
+        else if(textuser[0] == 'F' && textuser[1] == 'F' && strlen(textuser) == 3-1)
         {
             //alguem desistiu
         }
         else
         {
-            strcat (sendline,"Formato/Opcao desconhecido(a)...\0");
+            strcat (sendline,"Formato/Opcao desconhecido(a)...");
         }
         break;
     default:
-        strcat (sendline,"Isto nao devia acontecer...\0");
+        strcat (sendline,"Isto nao devia acontecer...");
         break;
     }
     

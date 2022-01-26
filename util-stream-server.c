@@ -35,8 +35,8 @@ int sockfd;
 		/* Manda linha de volta para o socket. n conta com
 		   o \0 da string, caso contr�rio perdia-se sempre 
 		   um caracter! */
-		
 		n = sizeof(linharesult);
+		printf("%d",n);
 		if (writen(sockfd, linharesult, n) != n)
 			err_dump("str_echo: writen error");
 		
