@@ -1,6 +1,8 @@
 #include <menu.h>
 
-int menu(room, sendline)
+#define MAXLINE 512
+
+int updateRoom(room, sendline)
 int room;
 char *sendline;
 {
@@ -17,47 +19,17 @@ char *sendline;
         }
         break;
     case 1:
-        if(sendline[0] == '2' && strlen(sendline) == 2)
+        if(sendline[0] == '1' && strlen(sendline) == 2)
         {
-            printf("Escolheu opcao 2...\n\n");
-            
-            //print the line
-            printf("%s", sendline);
-
-            room = 1;
-        }
-        else if(sendline[0] == '1' && strlen(sendline) == 2)
-        {
-            printf("Escolheu opcao 1...\n\n");
-
             room = 2;
         }
         else
         {
-            printf("Nao escolheu nenhuma das opcoes...\n\n");
             room = 1;
         }
         break;
     case 2:
-        //1x1 1
-        if(sendline[1] == 'x' && sendline[3] == ' ' && strlen(sendline) == 6)
-        {
-            if(isdigit(sendline[0]) && isdigit(sendline[2]) && isdigit(sendline[4]) && sendline[0] != 0 && sendline[2] != 0 && sendline[4] != 0)
-            {
-                // Subtrai 48 porque os digitos na tabela ASCII estão entre 48 e 57, inclusive
-                int numlinha = (int)sendline[0] - 48;
-                int numcoluna = (int)sendline[2] - 48;
-                int valor = (int)sendline[4] - 48;
-
-                //funcao de validar os dados no sudoku
-                
-            }
-            else
-            {
-                printf("Os valores inseridos são invalidos! Insere digitos de acordo com o formato pretendido.\n\n");
-            }
-        }
-        else if(sendline[0] == 'F' && sendline[1] == 'F' && strlen(sendline) == 3)
+        if(sendline[0] == 'F' && sendline[1] == 'F' && strlen(sendline) == 3)
         {
             //desistir o cliente
             if (0 == kill(getpid(), 0))
@@ -66,38 +38,81 @@ char *sendline;
                 exit(1);
             }
         }
-        else
-        {
-            printf("Formato/Opcao nao encontrada...\n\n");
-        }
         room = 2;
-        break;
-    default:
-        printf("Isto nao devia acontecer...\n\n");
-        break;
-    }
-
-    switch (room)
-    {
-    case 0:
-        printf("CARREGUE EM 'ENTER'\n\n");
-        break;
-    case 1:
-        printf("MENU PRINCIPAL\n");
-        printf("1) Entrar no Sudoku\n");
-        printf("2) Receber log\n\n");
-        break;
-    case 2:
-        printf("SUDOKU\n");
-        //printf(arraydosudoku);
-        printf("FORMATO: [Num Linha]x[Num Coluna] [Valor]\n");
-        printf("Insire 'FF' e pressione 'Enter' para desistir do Sudoku\n");
-
-        printf("\n");
         break;
     default:
         break;
     }
 
     return room;
+}
+
+void responseLine(room, sendline, textuser)
+int room;
+char sendline[MAXLINE];
+char textuser[MAXLINE];
+{
+    //char resultline[MAXLINE];
+    //strcpy (resultline,"");
+    switch (room)
+    {
+    case 0:
+        if(strlen(textuser) == 1) //Se nao tem opcao
+        {
+            strcat (sendline,"Indo ao Menu Principal..."); //Se der apenas ENTER Mostra o menu ao utilizador
+        }
+        else
+        {
+            strcat (sendline," ... \0"); //Volta à mensagem "CARREGUE EM 'ENTER'\n\n" caso o utilizador inserir mais do que o um carater exeto \0
+        }
+        break;
+    case 1:
+        if(textuser[0] == '2' && strlen(textuser) == 2)
+        {
+            strcat (sendline,"Escolheu opcao 2...");
+            //print the line
+            //strcat (sendline,sendline);
+        }
+        else if(textuser[0] == '1' && strlen(textuser) == 2)
+        {
+            strcat (sendline,"Escolheu opcao 1...");
+        }
+        else
+        {
+            strcat (sendline,"Nao escolheu nenhuma das opcoes...");
+        }
+        break;
+    case 2:
+        //1x1 1
+        if(textuser[1] == 'x' && textuser[3] == ' ' && strlen(textuser) == 6)
+        {
+            if(isdigit(textuser[0]) && isdigit(textuser[2]) && isdigit(textuser[4]) && textuser[0] != 0 && textuser[2] != 0 && textuser[4] != 0)
+            {
+                // Subtrai 48 porque os digitos na tabela ASCII estão entre 48 e 57, inclusive
+                int numlinha = (int)textuser[0] - 48;
+                int numcoluna = (int)textuser[2] - 48;
+                int valor = (int)textuser[4] - 48;
+
+                //funcao de validar os dados no sudoku
+                //validarsudoku(numlinha, numcoluna, valor, sudokuantes);
+            }
+            else
+            {
+                strcat (sendline,"Os valores inseridos são invalidos! Insere digitos de acordo com o formato pretendido.");
+            }
+        }
+        else if(textuser[0] == 'F' && textuser[1] == 'F' && strlen(textuser) == 3)
+        {
+            //alguem desistiu
+        }
+        else
+        {
+            strcat (sendline,"Formato/Opcao desconhecido(a)...");
+        }
+        break;
+    default:
+        strcat (sendline,"Isto nao devia acontecer...");
+        break;
+    }
+    
 }

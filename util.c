@@ -1,8 +1,8 @@
 
-/* Fun‡es utilitßrias retiradas de "UNIX Networking Programming" */
+/* Funï¿½es utilitï¿½rias retiradas de "UNIX Networking Programming" */
 
-/* LŠ nbytes de um ficheiro/socket.
-   Bloqueia at‰ conseguir ler os nbytes ou dar erro */
+/* Lï¿½ nbytes de um ficheiro/socket.
+   Bloqueia atï¿½ conseguir ler os nbytes ou dar erro */
 #include "unix.h"
 
 int readn(fd, ptr, nbytes)
@@ -27,7 +27,7 @@ int nbytes;
 }
 
 /* Escreve nbytes num ficheiro/socket. 
-   Bloqueia at‰ conseguir escrever os nbytes ou dar erro */
+   Bloqueia atï¿½ conseguir escrever os nbytes ou dar erro */
 
 int writen(fd, ptr, nbytes)
 int fd;
@@ -48,8 +48,8 @@ int nbytes;
 	return(nbytes - nleft);
 }
 
-/* LŠ uma linha de um ficheiro/socket (at‰ \n, maxlen ou \0).
-   Bloqueia at‰ ler a linha ou dar erro.
+/* Lï¿½ uma linha de um ficheiro/socket (atï¿½ \n, maxlen ou \0).
+   Bloqueia atï¿½ ler a linha ou dar erro.
    Retorna quantos caracteres conseguiu ler */
 
 int readline(fd, ptr, maxlen)
@@ -74,7 +74,7 @@ int maxlen;
 			return (-1);
 	}
 
-	/* Nƒo esquecer de terminar a string */
+	/* Nï¿½o esquecer de terminar a string */
 
 	*ptr = 0;
 

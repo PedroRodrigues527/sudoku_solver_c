@@ -6,4 +6,7 @@
 #include <sys/un.h>
 #include <ctype.h>
 
-int menu(int room, char *sendline);
+#define MAXLINE 512
+
+int updateRoom(int room, char *sendline);
+void responseLine(int room, char sendline[MAXLINE], char textuser[MAXLINE]);
