@@ -22,7 +22,7 @@ int sockfd;
         for (v = 0; v < 9; v++)
             sudokuresolver[u][v] = sudoku[u][v];
 	
-	//emptyBoard(sudokuresolver, 20);
+	emptyBoard(sudokuresolver, 20);
 	//sudoku = newBoard();
 	//int resolversudoku[9][9];
 	//memcpy(resolversudoku, emptyBoard(sudoku[9][9]), sizeof resolversudoku);

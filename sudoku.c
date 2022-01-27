@@ -206,7 +206,7 @@ void emptyBoard(int copymap[9][9], int emptyspaces)
     {
         for (j = 0; j < 9; j++)
         {
-            if(copymap[i][j] == 0 && emptyspaces > 0 && (rand() % 5) == 0)
+            if(copymap[i][j] != 0 && emptyspaces > 0 && (rand() % 4) == 0)
             {
                 copymap[i][j] = 0;
                 emptyspaces--;
@@ -220,10 +220,5 @@ void emptyBoard(int copymap[9][9], int emptyspaces)
         {
             break;
         }
-    }
-
-    if(emptyspaces > 0)
-    {
-        emptyBoard(copymap, emptyspaces);
     }
 }
