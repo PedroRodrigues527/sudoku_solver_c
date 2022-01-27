@@ -48,11 +48,13 @@ char *sendline;
     return room;
 }
 
-int responseLine(room, sendline, textuser, sudoku)
+int responseLine(room, sendline, textuser, sudokuresolver, fullsudoku, points)
 int room;
 char sendline[MAXLINE];
 char textuser[MAXLINE];
-int sudoku[9][9];
+int sudokuresolver[9][9];
+int fullsudoku[9][9];
+int points;
 {
     //char resultline[MAXLINE];
     strcpy(sendline, "");
@@ -97,11 +99,16 @@ int sudoku[9][9];
 
                 //funcao de validar os dados no sudoku
                 //validarsudoku(numlinha, numcoluna, valor, sudokuantes);
+                points = verifyBoard(sendline, sudokuresolver, fullsudoku, numlinha, numcoluna, valor, points);
             }
             else
             {
                 strcat (sendline,"Os valores inseridos são invalidos! Insere digitos de acordo com o formato pretendido...\n");
             }
+            print(9, sudokuresolver);
+            char buffer[MAXLINE];
+            sprintf(buffer, "Pontos: %d\n", points);
+            strcat (sendline,buffer);
         }
         else if(textuser[0] == 'F' && textuser[1] == 'F' && strlen(textuser) == 3)
         {
@@ -111,8 +118,11 @@ int sudoku[9][9];
         else
         {
             strcat (sendline,"Formato/Opcao desconhecido(a)...\n");
+            print(9, sudokuresolver);
+            char buffer[MAXLINE];
+            sprintf(buffer, "Pontos: %d\n", points);
+            strcat (sendline,buffer);
         }
-        print(9, sudoku);
         break;
     default:
         strcat (sendline,"Isto nao devia acontecer...\n");
@@ -120,4 +130,5 @@ int sudoku[9][9];
     }
     
     printf("Servidor: %s\n",sendline);
+    return points;
 }

@@ -9,4 +9,4 @@
 #define MAXLINE 512
 
 int updateRoom(int room, char *sendline);
-int responseLine(int room, char sendline[MAXLINE], char textuser[MAXLINE], int sudoku[9][9]);
+int responseLine(int room, char sendline[MAXLINE], char textuser[MAXLINE], int sudokuresolver[9][9], int fullsudoku[9][9], int points);

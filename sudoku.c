@@ -142,7 +142,7 @@ void reset_struct(struct nine_houses class_test[], int index)
             class_test[i].data[j] = 0;
 }
 
-// Program starts
+// Create New Full Sudoku
 void newBoard(int map[9][9])
 {
     srand(time(0));
@@ -161,41 +161,10 @@ void newBoard(int map[9][9])
         modify(nine_class, 9, map);
     }
 
-    //print(9, map);
-
-	//int solvedmap[9][9];
-	//memcpy(solvedmap, map, sizeof solvedmap);
-
-	//print(9, map);
-
 }
 
-//void emptyBoard(int map[9][9])
-//{
-    //int copymap[9][9];
-    //memcpy(copymap, map, sizeof copymap);
-    /*
-    srand(time(0));
 
-    int i, j;
-    for (i = 0; i < 9; i++)
-    {
-        for (j = 0; j < 9; j++)
-        {
-            if(copymap[i][j] == 0 && emptyspaces > 0 && (rand() % 5) == 0)
-            {
-                copymap[i][j] = 0;
-                emptyspaces--;
-            }
-        }
-    }
-    */
-   //int resultmap[9][9];
-   //resultmap = (int*)emptyCycle(copymap[9][9], 20);
-   //emptyCycle(map[9][9], 20);
-//}
-
-// This function will assert house of the map to 0
+// This function will empty 20 spaces of fullsudoku
 void emptyBoard(int copymap[9][9], int emptyspaces)
 {
     srand(time(0));
@@ -221,4 +190,38 @@ void emptyBoard(int copymap[9][9], int emptyspaces)
             break;
         }
     }
+}
+
+// This function will verify user input to sudoku validation
+int verifyBoard(sendline, sudokuresolver, fullsudoku, numlinha, numcoluna, valor, points)
+char *sendline;
+int sudokuresolver[9][9];
+int fullsudoku[9][9];
+int numlinha;
+int numcoluna;
+int valor;
+int points;
+{
+    int copypoints = points;
+    if(sudokuresolver[numlinha][numcoluna] == 0)
+    {
+        if(valor == fullsudoku[numlinha][numcoluna])
+        {
+            sudokuresolver[numlinha][numcoluna] = valor;
+            strcat(sendline,"Valor Correto!\n");
+            copypoints += 5;
+            //write file to insert totalpoints and tentatives
+        }
+        else
+        {
+            strcat(sendline,"Valor Incorreto!\n");
+            copypoints--;
+            //write file to insert totalpoints and tentatives
+        }
+    }
+    else
+    {
+        strcat(sendline,"Valor ja encontrado ou feito...\n");
+    }
+    return copypoints;
 }

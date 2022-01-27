@@ -16,7 +16,7 @@ int sockfd;
 	int sudoku[9][9];
 	newBoard(sudoku);
 	int sudokuresolver[9][9];
-	//int sudoku[9][9] = newBoard();
+	int points = 0;
 	int u, v;
     for (u = 0; u < 9; u++)
         for (v = 0; v < 9; v++)
@@ -40,7 +40,7 @@ int sockfd;
 		printf("Cliente %d no menu %d: %s", getpid(), roomclient, textoes);
 
 		//RESPOSTA DO SERVIDOR
-		responseLine(roomclient, linharesult, textoes, sudokuresolver);
+		points = responseLine(roomclient, linharesult, textoes, sudokuresolver, sudoku, points);
 		roomclient = updateRoom(roomclient, textoes);
 
 		line[0] = roomclient;
