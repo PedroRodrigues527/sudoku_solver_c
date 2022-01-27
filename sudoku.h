@@ -24,5 +24,4 @@ void print(int index, int map[index][index]);
 void reset_map(int index, int map[index][index]);
 void reset_struct(struct nine_houses class_test[], int index);
 void newBoard(int map[9][9]);
-//int **emptyBoard(int map[9][9]);
 void emptyBoard(int copymap[9][9], int emptyspaces);

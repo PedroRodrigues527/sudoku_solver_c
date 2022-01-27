@@ -1,4 +1,4 @@
-#include <menu.h>
+#include "menu.h"
 #include "sudoku.h"
 
 #define MAXLINE 512

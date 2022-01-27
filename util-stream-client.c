@@ -3,7 +3,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <menu.h>
+
+#include "menu.h"
 #define MAXLINE 512
 
 /* Cliente do tipo socket stream.
@@ -47,7 +48,8 @@ int sockfd;
 		fputs(recvline, stdout);
 		
 		printf("\n\n");
-		room = updateRoom(room, sendline);
+		//room = updateRoom(room, sendline);
+		room = (int)recvline[0];
 		switch (room)
 		{
 		case 0:
