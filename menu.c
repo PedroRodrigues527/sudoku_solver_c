@@ -57,34 +57,34 @@ char textuser[MAXLINE];
     switch (room)
     {
     case 0:
-        if(strlen(textuser) == 1-1) //Se nao tem opcao
+        if(strlen(textuser) == 1) //Se nao tem opcao
         {
-            strcat (sendline,"Indo ao Menu Principal..."); //Se der apenas ENTER Mostra o menu ao utilizador
+            strcat (sendline,"Indo ao Menu Principal...\n"); //Se der apenas ENTER Mostra o menu ao utilizador
         }
         else
         {
-            strcat (sendline,"..."); //Volta à mensagem "CARREGUE EM 'ENTER'\n\n" caso o utilizador inserir mais do que o um carater exeto \0
+            strcat (sendline,"...\n"); //Volta à mensagem "CARREGUE EM 'ENTER'\n\n" caso o utilizador inserir mais do que o um carater exeto \0
         }
         break;
     case 1:
-        if(textuser[0] == '2' && strlen(textuser) == 2-1)
+        if(textuser[0] == '2' && strlen(textuser) == 2)
         {
-            strcat (sendline,"Escolheu opcao 2...");
+            strcat (sendline,"Escolheu opcao 2...\n");
             //print the line
             //strcat (sendline,sendline);
         }
-        else if(textuser[0] == '1' && strlen(textuser) == 2-1)
+        else if(textuser[0] == '1' && strlen(textuser) == 2)
         {
-            strcat (sendline,"Escolheu opcao 1...");
+            strcat (sendline,"Escolheu opcao 1...\n");
         }
         else
         {
-            strcat (sendline,"Nao escolheu nenhuma das opcoes...");
+            strcat (sendline,"Nao escolheu nenhuma das opcoes...\n");
         }
         break;
     case 2:
         //1x1 1
-        if(textuser[1] == 'x' && textuser[3] == ' ' && strlen(textuser) == 6-1)
+        if(textuser[1] == 'x' && textuser[3] == ' ' && strlen(textuser) == 6)
         {
             if(isdigit(textuser[0]) && isdigit(textuser[2]) && isdigit(textuser[4]) && textuser[0] != 0 && textuser[2] != 0 && textuser[4] != 0)
             {
@@ -98,21 +98,23 @@ char textuser[MAXLINE];
             }
             else
             {
-                strcat (sendline,"Os valores inseridos são invalidos! Insere digitos de acordo com o formato pretendido...");
+                strcat (sendline,"Os valores inseridos são invalidos! Insere digitos de acordo com o formato pretendido...\n");
             }
         }
-        else if(textuser[0] == 'F' && textuser[1] == 'F' && strlen(textuser) == 3-1)
+        else if(textuser[0] == 'F' && textuser[1] == 'F' && strlen(textuser) == 3)
         {
-            //alguem desistiu
+            strcat (sendline,"Desistindo do Jogo...\n");
+            //mais dados de desistencia
         }
         else
         {
-            strcat (sendline,"Formato/Opcao desconhecido(a)...");
+            strcat (sendline,"Formato/Opcao desconhecido(a)...\n");
         }
         break;
     default:
-        strcat (sendline,"Isto nao devia acontecer...");
+        strcat (sendline,"Isto nao devia acontecer...\n");
         break;
     }
     
+    printf("Servidor: %s\n",sendline);
 }

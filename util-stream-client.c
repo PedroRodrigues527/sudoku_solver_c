@@ -38,11 +38,6 @@ int sockfd;
 		   terminar a string com \0 */
 		
 		n = readline(sockfd, recvline, MAXLINE);
-		printf("%d",n);
-		int i;
-		for (i = 0; i < strlen(recvline); i++)
-			printf("%c",recvline[i]);
-
 		if (n<0)
 			err_dump("str_cli:readline error");
 		recvline[n] = 0;

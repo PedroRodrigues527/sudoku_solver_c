@@ -1,133 +1,173 @@
-#include <sudoku.h>
+#include "sudoku.h"
 
-// N is the size of the 2D matrix N*N
-#define N 9
+/*
+    Hi, this program is a simple algorithm
+    for creating 'Sudoku' game maps.
+    It is perfectly useful for creating this game.
+    I basically used very simple functions and libraries
+    so this program can be recreated by anyone.
+    I hope this will help you, enjoy :))
+*/
 
-/* A utility function to print grid */
-void print(int arr[N][N])
+// This is one part of the nine part of the map
+// containing 9 house of a 3x3 table.
+/*
+struct nine_houses
 {
-	for (int i = 0; i < N; i++)
-	{
-		for (int j = 0; j < N; j++)
-			printf("%d ",arr[i][j]);
-		printf("\n");
-	}
+    int data[9];
+};
+*/
+
+// This function will return the number of the nine part
+// based on the map x and y coordinates.
+int find_class(int locX, int locY)
+{
+    return 3 * ( locY / 3 ) + ( locX / 3 );
 }
 
-// Checks whether it will be legal
-// to assign num to the
-// given row, col
-int isSafe(int grid[N][N], int row,
-					int col, int num)
+// This function is for putting the numbers in the map
+void fill(int index, int map[index][index], int y, int x)
 {
-	
-	// Check if we find the same num
-	// in the similar row , we return 0
-	for (int x = 0; x <= 8; x++)
-		if (grid[row][x] == num)
-			return 0;
-
-	// Check if we find the same num in the
-	// similar column , we return 0
-	for (int x = 0; x <= 8; x++)
-		if (grid[x][col] == num)
-			return 0;
-
-	// Check if we find the same num in the
-	// particular 3*3 matrix, we return 0
-	int startRow = row - row % 3,
-				startCol = col - col % 3;
-
-	for (int i = 0; i < 3; i++)
-		for (int j = 0; j < 3; j++)
-			if (grid[i + startRow][j +
-						startCol] == num)
-				return 0;
-
-	return 1;
+    int k;
+    for(k = 1; k < 10; k++, x++)
+    {
+        if(x >= index)
+            x = 0;
+        map[y][x] = k;
+    }
 }
 
-/* Takes a partially filled-in grid and attempts
-to assign values to all unassigned locations in
-such a way to meet the requirements for
-Sudoku solution (non-duplication across rows,
-columns, and boxes) */
-int solveSudoku(int grid[N][N], int row, int col)
+// This function will update the array of structs based of the map houses
+void update(struct nine_houses class_test[], int index, int map[index][index])
 {
-	
-	// Check if we have reached the 8th row
-	// and 9th column (0
-	// indexed matrix) , we are
-	// returning true to avoid
-	// further backtracking
-	if (row == N - 1 && col == N)
-		return 1;
-
-	// Check if column value becomes 9 ,
-	// we move to next row and
-	// column start from 0
-	if (col == N)
-	{
-		row++;
-		col = 0;
-	}
-
-	// Check if the current position
-	// of the grid already contains
-	// value >0, we iterate for next column
-	if (grid[row][col] > 0)
-		return solveSudoku(grid, row, col + 1);
-
-	for (int num = 1; num <= N; num++)
-	{
-		
-		// Check if it is safe to place
-		// the num (1-9) in the
-		// given row ,col ->we move to next column
-		if (isSafe(grid, row, col, num)==1)
-		{
-			/* assigning the num in the
-			current (row,col)
-			position of the grid
-			and assuming our assigned num
-			in the position
-			is correct	 */
-			grid[row][col] = num;
-		
-			// Checking for next possibility with next
-			// column
-			if (solveSudoku(grid, row, col + 1)==1)
-				return 1;
-		}
-	
-		// Removing the assigned num ,
-		// since our assumption
-		// was wrong , and we go for next
-		// assumption with
-		// diff num value
-		grid[row][col] = 0;
-	}
-	return 0;
+    int i, j;
+    for (i = 0; i < index; i++)
+    {
+        for (j = 0; j < index; j++)
+        {
+            class_test[find_class(j, i)].data[(j % 3) * 3 + (i % 3)] = map[i][j];
+        }
+    }
 }
 
-int main()
+// This function creates the houses based on the places we give
+void create(struct nine_houses class_test[], int index, int map[index][index])
 {
-	// 0 means unassigned cells
-	int grid[N][N] = { { 3, 0, 6, 5, 0, 8, 4, 0, 0 },
-					{ 5, 2, 0, 0, 0, 0, 0, 0, 0 },
-					{ 0, 8, 7, 0, 0, 0, 0, 3, 1 },
-					{ 0, 0, 3, 0, 1, 0, 0, 8, 0 },
-					{ 9, 0, 0, 8, 6, 3, 0, 0, 5 },
-					{ 0, 5, 0, 0, 9, 0, 6, 0, 0 },
-					{ 1, 3, 0, 0, 0, 0, 2, 5, 0 },
-					{ 0, 0, 0, 0, 0, 0, 0, 7, 4 },
-					{ 0, 0, 5, 2, 0, 6, 3, 0, 0 } };
+    fill(9, map, 0, 0); // We create base on what houses we need
+    fill(9, map, 1, 3);
+    fill(9, map, 2, 6);
+    fill(9, map, 3, 1);
+    fill(9, map, 4, 4);
+    fill(9, map, 5, 7);
+    fill(9, map, 6, 2);
+    fill(9, map, 7, 5);
+    fill(9, map, 8, 8);
+    update(class_test, index, map);
+}
 
-	if (solveSudoku(grid, 0, 0)==1)
-		print(grid);
-	else
-		printf("No solution exists");
+// This function does the update function in opposite
+void de_update(struct nine_houses class_test[], int index, int map[index][index])
+{
+    int i, j;
+    for (i = 0; i < index; i++)
+    {
+        for (j = 0; j < index; j++)
+        {
+            int x = (i % 3) * 3 + j / 3; // Finding the houses
+            int y = (i / 3) * 3 + j % 3;
+            map[y][x] = class_test[i].data[j];
+        }
+    }
+}
 
-	return 0;
-	// This is code is contributed by Pradeep Mondal P
+// This function will change two numbers places in the map
+void change(struct nine_houses class_test[], int index, int first, int second)
+{
+    int i, j, first_index, second_index;
+    for (i = 0; i < index; i++)
+    {
+        for (j = 0; j < index; j++)
+        {
+            if (class_test[i].data[j] == first)
+                first_index = j;
+            if (class_test[i].data[j] == second)
+                second_index = j;
+        }
+        int holder = class_test[i].data[first_index]; // Changing the places
+        class_test[i].data[first_index] = class_test[i].data[second_index];
+        class_test[i].data[second_index] = holder;
+    }
+}
+
+// This function will modify the map
+void modify(struct nine_houses class_test[], int index, int map[index][index])
+{
+    change(class_test, 9, rand() % 9 + 1, rand() % 9 + 1);
+    de_update(class_test, 9 , map);
+}
+
+// A function for showing the output
+void print(int index, int map[index][index])
+{
+    int i, j;
+    for (i = 0; i < index; i++)
+    {
+        for (j = 0; j < index; j++)
+        {
+            printf(" %d ", map[i][j]);
+            if ((j + 1) % 3 == 0 && j < 8)
+                printf(" | ");
+        }
+        printf("\n");
+        if ((i + 1) % 3 == 0 && i < 8)
+            printf("---------   ---------   ---------\n");
+    }
+}
+
+// This function will assert house of the map to 0
+void reset_map(int index, int map[index][index])
+{
+    int i, j;
+    for (i = 0; i < index; i++)
+        for (j = 0; j < index; j++)
+            map[i][j] = 0;
+}
+
+// This function will assert the data in 3x3 tables to 0
+void reset_struct(struct nine_houses class_test[], int index)
+{
+    int i, j;
+    for (i = 0; i < index; i++)
+        for (j = 0; j < index; j++)
+            class_test[i].data[j] = 0;
+}
+
+// Program starts
+int Main()
+{
+    srand(time(0));
+
+    int map[9][9];
+    struct nine_houses nine_class[9];
+
+    reset_map(9, map);
+    reset_struct(nine_class, 9);
+
+    create(nine_class, 9, map);
+
+    int number = rand() % 10 + 1;
+    int i;
+    for (i = 0; i < number; i++)
+    {
+        modify(nine_class, 9, map);
+    }
+
+    //print(9, map);
+
+	int solvedmap[9][9];
+	memcpy(solvedmap, map, sizeof solvedmap);
+
+	print(9, map);
+
+    return 0;
 }

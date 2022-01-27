@@ -1,4 +1,4 @@
-
+#include "sudoku.h"
 #include <menu.h>
 
 #define MAXLINE 512
@@ -12,7 +12,7 @@ int sockfd;
 	int n, i, roomclient;
 	char line[MAXLINE];
 	char linharesult[MAXLINE];
-	//char texto[MAXLINE];
+	char textoes[MAXLINE];
 
 	for (;;) {
 		/* Le a primeira linha do socket: os caracteres */
@@ -22,25 +22,26 @@ int sockfd;
 		else if (n < 0)
 			err_dump("str_echo: readline error");
 
-		line[n-1] = '\0';
-		char *texto = line+1;
-
-		roomclient = (int)line[0] - 48;
-
-		//VALIDACAO
-		//strcpy(linharesult, "");
-		responseLine(roomclient, linharesult, texto);
-		//falta validar sudoku
-
 		/* Manda linha de volta para o socket. n conta com
 		   o \0 da string, caso contr�rio perdia-se sempre 
 		   um caracter! */
-		n = sizeof(linharesult);
-		printf("%d",n);
-		if (writen(sockfd, linharesult, n) != n)
+		if (writen(sockfd, line, n) != n)
 			err_dump("str_echo: writen error");
-		
-		
-		printf("Cliente %d no menu %d: %s\n", getpid(), roomclient, texto);
+
+		char *texto = line+1;
+		strcpy(textoes, texto);
+
+		roomclient = (int)line[0] - 48;
+
+		printf("Cliente %d no menu %d: %s", getpid(), roomclient, textoes);
+		if(roomclient == 1 && textoes[0] == 49)
+		{
+			Main();
+		}
+		//VALIDACAO
+		//strcpy(linharesult, "");
+		responseLine(roomclient, linharesult, textoes);
+		//falta validar sudoku
+
 	}
 }
