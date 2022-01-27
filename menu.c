@@ -1,4 +1,5 @@
 #include <menu.h>
+#include "sudoku.h"
 
 #define MAXLINE 512
 
@@ -47,10 +48,11 @@ char *sendline;
     return room;
 }
 
-void responseLine(room, sendline, textuser)
+int responseLine(room, sendline, textuser, sudoku)
 int room;
 char sendline[MAXLINE];
 char textuser[MAXLINE];
+int sudoku[9][9];
 {
     //char resultline[MAXLINE];
     strcpy(sendline, "");
@@ -110,6 +112,7 @@ char textuser[MAXLINE];
         {
             strcat (sendline,"Formato/Opcao desconhecido(a)...\n");
         }
+        print(9, sudoku);
         break;
     default:
         strcat (sendline,"Isto nao devia acontecer...\n");

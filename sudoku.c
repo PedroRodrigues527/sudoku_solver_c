@@ -143,11 +143,10 @@ void reset_struct(struct nine_houses class_test[], int index)
 }
 
 // Program starts
-int Main()
+void newBoard(int map[9][9])
 {
     srand(time(0));
 
-    int map[9][9];
     struct nine_houses nine_class[9];
 
     reset_map(9, map);
@@ -164,10 +163,67 @@ int Main()
 
     //print(9, map);
 
-	int solvedmap[9][9];
-	memcpy(solvedmap, map, sizeof solvedmap);
+	//int solvedmap[9][9];
+	//memcpy(solvedmap, map, sizeof solvedmap);
 
-	print(9, map);
+	//print(9, map);
 
-    return 0;
+}
+
+//void emptyBoard(int map[9][9])
+//{
+    //int copymap[9][9];
+    //memcpy(copymap, map, sizeof copymap);
+    /*
+    srand(time(0));
+
+    int i, j;
+    for (i = 0; i < 9; i++)
+    {
+        for (j = 0; j < 9; j++)
+        {
+            if(copymap[i][j] == 0 && emptyspaces > 0 && (rand() % 5) == 0)
+            {
+                copymap[i][j] = 0;
+                emptyspaces--;
+            }
+        }
+    }
+    */
+   //int resultmap[9][9];
+   //resultmap = (int*)emptyCycle(copymap[9][9], 20);
+   //emptyCycle(map[9][9], 20);
+//}
+
+// This function will assert house of the map to 0
+void emptyBoard(int copymap[9][9], int emptyspaces)
+{
+    srand(time(0));
+    //int copyempspaces = emptyspaces;
+
+    int i, j;
+    for (i = 0; i < 9; i++)
+    {
+        for (j = 0; j < 9; j++)
+        {
+            if(copymap[i][j] == 0 && emptyspaces > 0 && (rand() % 5) == 0)
+            {
+                copymap[i][j] = 0;
+                emptyspaces--;
+            }
+            if(emptyspaces <= 0)
+            {
+                break;
+            }
+        }
+        if(emptyspaces <= 0)
+        {
+            break;
+        }
+    }
+
+    if(emptyspaces > 0)
+    {
+        emptyBoard(copymap, emptyspaces);
+    }
 }
