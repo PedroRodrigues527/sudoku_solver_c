@@ -37,7 +37,7 @@ int sockfd;
 
 		roomclient = (int)line[0] - 48;
 
-		printf("Cliente %d no menu %d: %s", getpid(), roomclient, textoes);
+		printf("Cliente %d no menu %d: %s", getpid()-1, roomclient, textoes);
 
 		//RESPOSTA DO SERVIDOR
 		points = responseLine(roomclient, linharesult, textoes, sudokuresolver, sudoku, points);

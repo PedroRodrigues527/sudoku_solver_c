@@ -1,4 +1,5 @@
 #include "sudoku.h"
+#include "menu.h"
 
 /*
     Hi, this program is a simple algorithm
@@ -211,12 +212,18 @@ int points;
             strcat(sendline,"Valor Correto!\n");
             copypoints += 5;
             //write file to insert totalpoints and tentatives
+            //trinco fechar
+            copypoints = updatePontosTotal(copypoints, 5);
+            //trinco abrir
         }
         else
         {
             strcat(sendline,"Valor Incorreto!\n");
             copypoints--;
             //write file to insert totalpoints and tentatives
+            //trinco fechar
+            copypoints = updatePontosTotal(copypoints, -1);
+            //trinco abrir
         }
     }
     else

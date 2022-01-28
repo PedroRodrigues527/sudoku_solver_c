@@ -16,8 +16,15 @@ FILE *fp;
 int sockfd;
 {
 	int n;
-	char sendline[MAXLINE], recvline[MAXLINE+1];
+	char sendline[MAXLINE], recvline[MAXLINE+1], linharesultado[MAXLINE];
 	int room = 0; //Indica o menu em que o cliente esta presente
+
+	//ficheiro de texto - adicionar +1 a num clientes no ficheiro 'dados'
+	//ler inteiro do ficheiro (primeira linha - numclientes)
+	//trinco fechar
+	updateNumberClients(1);
+	//trinco abrir
+
 
 	printf("CARREGUE EM 'ENTER'\n\n");
 
@@ -46,9 +53,10 @@ int sockfd;
 		/* Envia a string para stdout */
 		//printf("%s", recvline);
 		fputs(recvline, stdout);
+		responseLineClient(room, linharesultado, sendline);
 		
 		printf("\n\n");
-		//room = updateRoom(room, sendline);
+		
 		room = (int)recvline[0];
 		switch (room)
 		{
