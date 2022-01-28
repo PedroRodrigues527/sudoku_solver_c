@@ -69,6 +69,12 @@ int sockfd;
 		case 2:
 			printf ("SUDOKU\nFORMATO: [Num Linha]x[Num Coluna] [Valor]\nInsire 'FF' e pressione 'Enter' para desistir do Sudoku\n\n");
 			break;
+		case 3:
+			printf ("SUDOKU\nFORMATO: [Num Linha]x[Num Coluna] [Valor]\nInsire 'FF' e pressione 'Enter' para desistir do Sudoku\n\n");
+			break;
+		case 4:
+			printf ("SUDOKU\nFORMATO: [Num Linha]x[Num Coluna] [Valor]\nInsire 'FF' e pressione 'Enter' para desistir do Sudoku\n\n");
+			break;
 		case 8:
 			//desistir o cliente
             if (0 == kill(getpid(), 0))
@@ -89,6 +95,7 @@ int sockfd;
 		default:
 			break;
 		}
+
 	}
 	if (ferror(fp))
 		err_dump("str_cli: error reading file");
