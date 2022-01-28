@@ -109,7 +109,7 @@ int points;
             char buffer[MAXLINE];
             sprintf(buffer, "Pontos: %d\n", points);
             strcat (sendline,buffer);
-            //verifycomplete
+            
         }
         else if(textuser[0] == 'F' && textuser[1] == 'F' && strlen(textuser) == 3)
         {

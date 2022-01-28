@@ -26,3 +26,4 @@ void reset_struct(struct nine_houses class_test[], int index);
 void newBoard(int map[9][9]);
 void emptyBoard(int copymap[9][9], int emptyspaces);
 int verifyBoard(char *sendline,int sudokuresolver[9][9],int fullsudoku[9][9],int numlinha,int numcoluna,int valor,int points);
+int isFinished(int sudokuresolver[9][9], int fullsudoku[9][9]);

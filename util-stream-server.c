@@ -66,6 +66,23 @@ int sockfd;
 		points = responseLine(roomclient, linharesult, textoes, sudokuresolver, sudoku, points);
 
 		strcat(clienteservidor, linharesult);
+
+		//verifycomplete
+		int isover;
+		isover = isFinished(sudokuresolver, sudoku);
+		if(isover == 0)
+		{
+			strcat(clienteservidor,"SUDOKU CONCLUIDO!!\n");
+			//trinco fechar
+			updateNumberClients(0);
+			//trinco abrir
+			roomclient = 9;
+		}
+		else
+		{
+			roomclient = updateRoom(roomclient, textoes);
+		}
+
 		printf(clienteservidor);
 
 		//trincofecha
@@ -73,8 +90,6 @@ int sockfd;
 		write(fd, clienteservidor, strlen(clienteservidor));
 		close(fd);
 		//trincoabre
-
-		roomclient = updateRoom(roomclient, textoes);
 
 		line[0] = roomclient;
 

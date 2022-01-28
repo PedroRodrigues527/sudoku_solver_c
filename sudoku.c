@@ -230,5 +230,39 @@ int points;
     {
         strcat(sendline,"Valor ja encontrado ou feito...\n");
     }
+
+    // int isover;
+    // isover = isFinished(sudokuresolver, fullsudoku);
+    // if(isover == 0)
+    // {
+    //     strcat(sendline,"SUDOKU CONCLUIDO!!\n");
+    //     //trinco fechar
+    //     updateNumberClients(0);
+    //     //trinco abrir
+    //     exit(1);
+    // }
     return copypoints;
+}
+
+int isFinished(int sudokuresolver[9][9], int fullsudoku[9][9])
+{
+    int isfinished = 1;
+    int i, j;
+    for (i = 0; i < index; i++)
+    {
+        for (j = 0; j < index; j++)
+        {
+            if(sudokuresolver[i][j] != fullsudoku[i][j])
+            {
+                isfinished = 0;
+                break;
+            }
+        }
+        if(isfinished == 0)
+        {
+            break;
+        }
+    }
+
+    return isfinished;
 }
