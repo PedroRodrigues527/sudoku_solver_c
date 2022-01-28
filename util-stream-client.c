@@ -15,8 +15,8 @@ str_cli(fp, sockfd)
 FILE *fp;
 int sockfd;
 {
-	int n;
-	char sendline[MAXLINE], recvline[MAXLINE+1], linharesultado[MAXLINE];
+	int n; //Tamanho da informação que será enviada
+	char sendline[MAXLINE], recvline[MAXLINE+1], linharesultado[MAXLINE]; ////MAXLINE+1 -> devido ao \0; Mostrar opção escolhida (resposta que o cliente mandou)
 	int room = 0; //Indica o menu em que o cliente esta presente
 
 	//ficheiro de texto - adicionar +1 a num clientes no ficheiro 'dados'
@@ -28,16 +28,16 @@ int sockfd;
 
 	printf("CARREGUE EM 'ENTER'\n\n");
 
-	while (fgets(sendline, MAXLINE, fp) != NULL) {
+	while (fgets(sendline, MAXLINE, fp) != NULL) { //Espera pelo cliente
 		
         /* Envia string para sockfd. Note-se que o \0 nao 
         	e enviado */
 		
-		char fullstring[MAXLINE];
-		sprintf(fullstring, "%d", room);
+		char fullstring[MAXLINE]; //room + texto que o cliente inseriu (room + sendline)
+		sprintf(fullstring, "%d", room); //Sprintf: Adicionar a variavel informação
 		strcat(fullstring, sendline);
 		n = strlen(fullstring);
-		if (writen(sockfd, fullstring, n) != n)
+		if (writen(sockfd, fullstring, n) != n) //Verifica se o socket foi enviado com sucesso
 			err_dump("str_cli: writen error on socket");
 		
 		//printf(fullstring);
@@ -45,15 +45,15 @@ int sockfd;
 		/* Tenta ler string de sockfd. Note-se que tem de 
 		   terminar a string com \0 */
 		
-		n = readline(sockfd, recvline, MAXLINE);
+		n = readline(sockfd, recvline, MAXLINE);  //Ler linha recebida pelo servidor
 		if (n<0)
 			err_dump("str_cli:readline error");
-		recvline[n] = 0;
+		recvline[n] = 0; //Ultimo caracter vazi
 		//printf("5");
 		/* Envia a string para stdout */
 		//printf("%s", recvline);
-		fputs(recvline, stdout);
-		responseLineClient(room, linharesultado, sendline);
+		fputs(recvline, stdout); //Mostrar no ecrã receive line
+		responseLineClient(room, linharesultado, sendline); //Responder resposta client-side
 		
 		printf("\n\n");
 		
