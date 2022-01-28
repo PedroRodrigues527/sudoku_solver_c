@@ -74,6 +74,8 @@ int sockfd;
 		if(isover == 1)
 		{
 			strcat(clienteservidor,"SUDOKU CONCLUIDO!!\n");
+			sprintf(idcliente, "PONTOS: %d\n", points);
+			strcat(clienteservidor, idcliente);
 			//trinco fechar
 			updateNumberClients(0);
 			//trinco abrir
