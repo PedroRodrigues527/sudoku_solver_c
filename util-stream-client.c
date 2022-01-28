@@ -67,13 +67,13 @@ int sockfd;
 			printf ("MENU PRINCIPAL\n1) Entrar no Sudoku\n2) Receber log\n\n");
 			break;
 		case 2:
-			printf ("SUDOKU\nFORMATO: [Num Linha]x[Num Coluna] [Valor]\nInsire 'FF' e pressione 'Enter' para desistir do Sudoku\n\n");
+			printf ("SUDOKU\nFORMATO: [Num Linha 0-8]x[Num Coluna 0-8] [Valor 1-9]\nInsire 'FF' e pressione 'Enter' para desistir do Sudoku\n\n");
 			break;
 		case 3:
-			printf ("SUDOKU\nFORMATO: [Num Linha]x[Num Coluna] [Valor]\nInsire 'FF' e pressione 'Enter' para desistir do Sudoku\n\n");
+			printf ("SUDOKU\nFORMATO: [Num Linha 0-8]x[Num Coluna 0-8] [Valor 1-9]\nInsire 'FF' e pressione 'Enter' para desistir do Sudoku\n\n");
 			break;
 		case 4:
-			printf ("SUDOKU\nFORMATO: [Num Linha]x[Num Coluna] [Valor]\nInsire 'FF' e pressione 'Enter' para desistir do Sudoku\n\n");
+			printf ("SUDOKU\nFORMATO: [Num Linha 0-8]x[Num Coluna 0-8] [Valor 1-9]\nInsire 'FF' e pressione 'Enter' para desistir do Sudoku\n\n");
 			break;
 		case 8:
 			//desistir o cliente
