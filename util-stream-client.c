@@ -3,9 +3,32 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <pthread.h>
+#include <unistd.h>
 
 #include "menu.h"
 #define MAXLINE 512
+pthread_mutex_t mutex;
+
+void* func1(void *valor){
+	pthread_mutex_lock(&mutex);
+    return (void *) 1;
+	pthread_mutex_unlock(&mutex);
+}
+
+void* func2(void *valor){
+	pthread_mutex_lock(&mutex);
+    return (void *) 2;
+	pthread_mutex_unlock(&mutex);
+}
+
+void* func3(void *valor){
+	pthread_mutex_lock(&mutex);
+    return (void *) 0;
+	pthread_mutex_unlock(&mutex);
+}
+
+
 
 /* Cliente do tipo socket stream.
    Le string de fp e envia para sockfd.
@@ -18,6 +41,9 @@ int sockfd;
 	int n; //Tamanho da informação que será enviada
 	char sendline[MAXLINE], recvline[MAXLINE+1], linharesultado[MAXLINE]; ////MAXLINE+1 -> devido ao \0; Mostrar opção escolhida (resposta que o cliente mandou)
 	int room = 0; //Indica o menu em que o cliente esta presente
+	pthread_t id1, id2, id3;
+	int jogador = 0;
+	void *status;
 
 	//ficheiro de texto - adicionar +1 a num clientes no ficheiro 'dados'
 	//ler inteiro do ficheiro (primeira linha - numclientes)
@@ -29,12 +55,56 @@ int sockfd;
 	printf("CARREGUE EM 'ENTER'\n\n");
 
 	while (fgets(sendline, MAXLINE, fp) != NULL) { //Espera pelo cliente
-		
+		if(room == 2)
+		{
+			pthread_mutex_init(&mutex, NULL);
+			//printf("antesjog: %d\n",jogador);
+			if(jogador == 0)
+			{
+
+				if(pthread_create(&id1, NULL, func1, NULL) != 0)
+				{
+					printf("erro na criacao da tarefa 1\n");
+					exit(1);
+				}
+				pthread_join(id1, &status);
+
+			}
+			else if(jogador == 1)
+			{
+
+				if(pthread_create(&id2, NULL, func2, NULL) != 0)
+				{
+					printf("erro na criacao da tarefa 2\n");
+					exit(1);
+				}
+				pthread_join(id2, &status);
+
+			}
+			else if(jogador == 2)
+			{
+
+				if(pthread_create(&id3, NULL, func3, NULL) != 0)
+				{
+					printf("erro na criacao da tarefa 3\n");
+					exit(1);
+				}
+				pthread_join(id3, &status);
+
+			}
+			jogador = (int)status;
+			//printf("depoisjog: %d\n",jogador);
+			//pthread_mutex_destroy(&mutex);
+		}
+
         /* Envia string para sockfd. Note-se que o \0 nao 
         	e enviado */
 		
 		char fullstring[MAXLINE]; //room + texto que o cliente inseriu (room + sendline)
-		sprintf(fullstring, "%d", room); //Sprintf: Adicionar a variavel informação
+		sprintf(fullstring, "%d%d", room, jogador); //Sprintf: Adicionar a variavel informação
+		//char outrostring[MAXLINE];
+		//sprintf(outrostring, "%d", jogador); //Sprintf: Adicionar a variavel informação
+		//strcat(fullstring, outrostring);
 		strcat(fullstring, sendline);
 		n = strlen(fullstring);
 		if (writen(sockfd, fullstring, n) != n) //Verifica se o socket foi enviado com sucesso
@@ -58,6 +128,7 @@ int sockfd;
 		printf("\n\n");
 		
 		room = (int)recvline[0];
+		jogador = (int)recvline[1];
 		switch (room)
 		{
 		case 0:
@@ -67,13 +138,21 @@ int sockfd;
 			printf ("MENU PRINCIPAL\n1) Entrar no Sudoku\n2) Receber log\n\n");
 			break;
 		case 2:
-			printf ("SUDOKU\nFORMATO: [Num Linha 0-8]x[Num Coluna 0-8] [Valor 1-9]\nInsire 'FF' e pressione 'Enter' para desistir do Sudoku\n\n");
-			break;
-		case 3:
-			printf ("SUDOKU\nFORMATO: [Num Linha 0-8]x[Num Coluna 0-8] [Valor 1-9]\nInsire 'FF' e pressione 'Enter' para desistir do Sudoku\n\n");
-			break;
-		case 4:
-			printf ("SUDOKU\nFORMATO: [Num Linha 0-8]x[Num Coluna 0-8] [Valor 1-9]\nInsire 'FF' e pressione 'Enter' para desistir do Sudoku\n\n");
+			printf ("SUDOKU\nFORMATO: [Num Linha 0-8]x[Num Coluna 0-8] [Valor 1-9]\nInsire 'FF' e pressione 'Enter' para desistir do Sudoku\n");
+			switch(jogador)
+			{
+				case 0:
+					printf(" JOGADOR 1 (So linhas 0-2): \n\n");
+					break;
+				case 1:
+					printf(" JOGADOR 2 (So linhas 3-5): \n\n");
+					break;
+				case 2:
+					printf(" JOGADOR 3 (So linhas 6-8): \n\n");
+					break;
+				default:
+					break;
+			}
 			break;
 		case 8:
 			//desistir o cliente
@@ -81,6 +160,7 @@ int sockfd;
             {
                 // Process exists.
 				printf("DESISTIU\n");
+				pthread_mutex_destroy(&mutex);
                 exit(1);
             }
 		case 9:
@@ -89,6 +169,7 @@ int sockfd;
             {
                 // Process exists.
 				printf("SUDOKU CONCLUIDO!!\n");
+				pthread_mutex_destroy(&mutex);
                 exit(1);
             }
 			break;

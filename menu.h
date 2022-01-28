@@ -9,7 +9,7 @@
 #define MAXLINE 512
 
 int updateRoom(int room, char *sendline);
-int responseLine(int room, char sendline[MAXLINE], char textuser[MAXLINE], int sudokuresolver[9][9], int fullsudoku[9][9], int points);
+int responseLine(int room, char sendline[MAXLINE], char textuser[MAXLINE], int sudokuresolver[9][9], int fullsudoku[9][9], int points, int turnojogador);
 int responseLineClient(int room, char sendline[MAXLINE], char textuser[MAXLINE]);
 int updateNumberClients(int isIncrem);
 int updateNumberDesistencias();

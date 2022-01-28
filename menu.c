@@ -46,13 +46,14 @@ char *sendline;
     return room;
 }
 
-int responseLine(room, sendline, textuser, sudokuresolver, fullsudoku, points)
+int responseLine(room, sendline, textuser, sudokuresolver, fullsudoku, points, turnojogador)
 int room;
 char sendline[MAXLINE];
 char textuser[MAXLINE];
 int sudokuresolver[9][9];
 int fullsudoku[9][9];
 int points;
+int turnojogador;
 {
     //char resultline[MAXLINE];
     sprintf(sendline, "Servidor %d: ", getpid());
@@ -89,7 +90,7 @@ int points;
         //1x1 1
         if(textuser[1] == 'x' && textuser[3] == ' ' && strlen(textuser) == 6)
         {
-            if(isdigit(textuser[0]) && isdigit(textuser[2]) && isdigit(textuser[4]) && textuser[0] != 0 && textuser[2] != 0 && textuser[4] != 0)
+            if(isdigit(textuser[0]) && isdigit(textuser[2]) && isdigit(textuser[4]) && textuser[0] != 9 && textuser[2] != 9 && textuser[4] != 0)
             {
                 // Subtrai 48 porque os digitos na tabela ASCII estão entre 48 e 57, inclusive
                 int numlinha = (int)textuser[0] - 48;
@@ -97,7 +98,39 @@ int points;
                 int valor = (int)textuser[4] - 48;
 
                 //funcao de validar os dados no sudoku
-                points = verifyBoard(sendline, sudokuresolver, fullsudoku, numlinha, numcoluna, valor, points);
+                if(turnojogador == 1)
+                {
+                    if(numlinha == 0 || numlinha == 1 || numlinha == 2)
+                    {
+                        points = verifyBoard(sendline, sudokuresolver, fullsudoku, numlinha, numcoluna, valor, points);
+                    }
+                    else
+                    {
+                        strcat (sendline,"O numero da linha inserida nao pertence as tres linhas do Jogador 1: so pode escolher as tres primeiras linhas (0-2)\n");
+                    }
+                }
+                else if(turnojogador == 2)
+                {
+                    if(numlinha == 3 || numlinha == 4 || numlinha == 5)
+                    {
+                        points = verifyBoard(sendline, sudokuresolver, fullsudoku, numlinha, numcoluna, valor, points);
+                    }
+                    else
+                    {
+                        strcat (sendline,"O numero da linha inserida nao pertence as tres linhas do Jogador 2: so pode escolher as tres linhas do meio do sudoku (3-5)\n");
+                    }
+                }
+                else if(turnojogador == 0)
+                {
+                    if(numlinha == 6 || numlinha == 7 || numlinha == 8)
+                    {
+                        points = verifyBoard(sendline, sudokuresolver, fullsudoku, numlinha, numcoluna, valor, points);
+                    }
+                    else
+                    {
+                        strcat (sendline,"O numero da linha inserida nao pertence as tres linhas do Jogador 3: so pode escolher as tres ultimas linhas (6-8)\n");
+                    }
+                }
             }
             else
             {

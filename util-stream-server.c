@@ -16,7 +16,7 @@
 str_echo(sockfd)
 int sockfd;
 {
-	int n, i, roomclient;
+	int n, i, roomclient, turnojogador;
 	char line[MAXLINE];
 	char linharesult[MAXLINE];
 	char textoes[MAXLINE];
@@ -39,10 +39,11 @@ int sockfd;
 		else if (n < 0)
 			err_dump("str_echo: readline error");
 
-		char *texto = line+1;
+		char *texto = line+2; //10asfhskjufbhafk
 		strcpy(textoes, texto);
 
 		roomclient = (int)line[0] - 48;
+		turnojogador = (int)line[1] - 48;
 
 		char clienteservidor[MAXLINE];
 		sprintf(clienteservidor,"");
@@ -63,7 +64,7 @@ int sockfd;
 		strcat(clienteservidor, idcliente);
 
 		//RESPOSTA DO SERVIDOR
-		points = responseLine(roomclient, linharesult, textoes, sudokuresolver, sudoku, points);
+		points = responseLine(roomclient, linharesult, textoes, sudokuresolver, sudoku, points, turnojogador);
 
 		strcat(clienteservidor, linharesult);
 
@@ -92,6 +93,7 @@ int sockfd;
 		//trincoabre
 
 		line[0] = roomclient;
+		line[1] = turnojogador;
 
 		/* Manda linha de volta para o socket. n conta com
 		   o \0 da string, caso contr�rio perdia-se sempre 
