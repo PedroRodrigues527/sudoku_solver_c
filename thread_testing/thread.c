@@ -1,6 +1,3 @@
-/*
-* Testing threads and his functionalities
-*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -8,33 +5,55 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <pthread.h>
+#include <unistd.h>
 
 
-//Child thread executes this
-void *entry_point(void *value){
-    printf("Hello from the other side!");
-
-    int *num = (int*) value;
-
-    printf("value: %d", *num);
-
-    return NULL;
+void* func1(){
+    printf("***Thread1*** \n");
+    int i = 0;
+    for(i; i< 100; i++ ){
+        printf("%d",i);
+        printf("\n");
+    }
 }
 
+void* func2(){
+    printf("***Thread2*** \n");
+    int k = 100;
+    for(k; k< 200; k++ ){
+        printf("%d",k);
+        printf("\n");
+    }
+}
+
+void* func3(){
+    printf("***Thread3*** \n");
+    int l = 200;
+    for(l; l< 300; l++ ){
+        printf("%d",l);
+        printf("\n");
+    }
+}
+
+
+
 int main(){
-    pthread_t thread;
+    //int i;
+    pthread_t id1;
+    pthread_t id2;
+    pthread_t id3;
 
-    printf("First thread \n");
+    pthread_create(&id1, NULL, func1, NULL);
+    pthread_join(id1, NULL);
 
-    int num = 123;
+    pthread_create(&id2, NULL, func2, NULL);
+    pthread_join(id2, NULL);
 
-    //Args: ref to thread struct; atributes; Func. entry point; value to send to function
-    pthread_create(&thread, NULL, entry_point, &num);
+    pthread_create(&id3, NULL, func3, NULL);
+    pthread_join(id3, NULL);
 
-    //Args: value of the struct;
-    pthread_join(thread, NULL); //Ensures the main thread wait for the second thread finishes
+
+    //pthread_exit(NULL);
 
     return EXIT_SUCCESS;
 }
-
-
