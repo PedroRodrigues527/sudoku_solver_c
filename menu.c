@@ -32,14 +32,12 @@ char *sendline;
     case 2:
         if(sendline[0] == 'F' && sendline[1] == 'F' && strlen(sendline) == 3)
         {
-            //desistir o cliente
-            if (0 == kill(getpid(), 0))
-            {
-                // Process exists.
-                exit(1);
-            }
+            room = 8;
         }
-        room = 2;
+        else
+        {
+            room = 2;
+        }
         break;
     default:
         break;
@@ -80,6 +78,7 @@ int points;
         else if(textuser[0] == '1' && strlen(textuser) == 2)
         {
             strcat (sendline,"Escolheu opcao 1...\n");
+            print(9, sudokuresolver);
         }
         else
         {
@@ -109,7 +108,7 @@ int points;
             char buffer[MAXLINE];
             sprintf(buffer, "Pontos: %d\n", points);
             strcat (sendline,buffer);
-            
+
         }
         else if(textuser[0] == 'F' && textuser[1] == 'F' && strlen(textuser) == 3)
         {

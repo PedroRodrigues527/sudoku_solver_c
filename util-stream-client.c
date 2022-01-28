@@ -69,6 +69,14 @@ int sockfd;
 		case 2:
 			printf ("SUDOKU\nFORMATO: [Num Linha]x[Num Coluna] [Valor]\nInsire 'FF' e pressione 'Enter' para desistir do Sudoku\n\n");
 			break;
+		case 8:
+			//desistir o cliente
+            if (0 == kill(getpid(), 0))
+            {
+                // Process exists.
+				printf("DESISTIU\n");
+                exit(1);
+            }
 		case 9:
 			//desistir o cliente
             if (0 == kill(getpid(), 0))

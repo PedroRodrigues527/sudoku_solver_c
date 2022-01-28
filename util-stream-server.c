@@ -70,7 +70,7 @@ int sockfd;
 		//verifycomplete
 		int isover;
 		isover = isFinished(sudokuresolver, sudoku);
-		if(isover == 0)
+		if(isover == 1)
 		{
 			strcat(clienteservidor,"SUDOKU CONCLUIDO!!\n");
 			//trinco fechar
