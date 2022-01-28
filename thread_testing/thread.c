@@ -10,29 +10,35 @@
 
 void* func1(){
     printf("***Thread1*** \n");
-    int i = 0;
+    printf("%d",pthread_self()); //Get thread id
+    printf("\n");
+    /*int i = 0;
     for(i; i< 100; i++ ){
         printf("%d",i);
         printf("\n");
-    }
+    }*/
 }
 
 void* func2(){
     printf("***Thread2*** \n");
-    int k = 100;
+    printf("%d",pthread_self());
+    printf("\n");
+    /*int k = 100;
     for(k; k< 200; k++ ){
         printf("%d",k);
         printf("\n");
-    }
+    }*/
 }
 
 void* func3(){
     printf("***Thread3*** \n");
-    int l = 200;
+    printf("%d",pthread_self());
+    printf("\n");
+    /*int l = 200;
     for(l; l< 300; l++ ){
         printf("%d",l);
         printf("\n");
-    }
+    }*/
 }
 
 
