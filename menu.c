@@ -57,7 +57,7 @@ int fullsudoku[9][9];
 int points;
 {
     //char resultline[MAXLINE];
-    strcpy(sendline, "");
+    sprintf(sendline, "Servidor %d: ", getpid());
     switch (room)
     {
     case 0:
@@ -133,8 +133,12 @@ int points;
         strcat (sendline,"Isto nao devia acontecer...\n");
         break;
     }
-    
-    printf("Servidor %d: %s\n", getpid(), sendline);
+    //char temp[MAXLINE];
+    //sprintf(temp, "Servidor %d: ", getpid());
+    //strcat(temp, sendline);
+    //sprintf(sendline, temp);
+    //printf("Servidor %d: %s\n", getpid(), sendline);
+    //printf(sendline);
     return points;
 }
 
@@ -371,42 +375,6 @@ int updatePontosTotal(int numpontos, int increm)
     remove("dados");
 
     rename("replace.tmp","dados");
-
-
-    // the_file = fopen("dados", "r+");
-	// if(the_file == NULL)
-	// {
-	// 	perror("Unable to open the file 'dados'!");
-	// 	exit(1);
-	// }
-	// char line1[MAXLINE];
-	// fgets(line1, MAXLINE, the_file);
-    // fgets(line1, MAXLINE, the_file);
-    // fgets(line1, MAXLINE, the_file);
-    // fgets(line1, MAXLINE, the_file);
-	// //fclose(the_file);
-	// //incrementar +1
-    // int ntent;
-	// ntent = atoi(line1) + 1;
-	// //sprintf(line, "%d", ndesis);
-	// //escrever inteiro do ficheiro numclientes na primeira linha
-	// // the_file = fopen("dados", "w");
-	// // if(the_file == NULL)
-	// // {
-	// // 	perror("Unable to open the file 'dados'!");
-	// // 	exit(1);
-	// // }
-    // fseek(the_file, 0, SEEK_SET);
-    // fgets(line1, MAXLINE, the_file);
-    // fgets(line1, MAXLINE, the_file);
-    // fgets(line1, MAXLINE, the_file);
-	// fflush(the_file);
-    // fseek(the_file, 0, SEEK_SET);
-    // fgets(line1, MAXLINE, the_file);
-    // fgets(line1, MAXLINE, the_file);
-    // fgets(line1, MAXLINE, the_file);
-	// fprintf(the_file,"%d",ntent);
-	// fclose(the_file);
 
     return copypontos;
 }

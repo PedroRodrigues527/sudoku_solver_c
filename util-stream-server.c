@@ -1,3 +1,10 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
+
 #include "sudoku.h"
 #include "menu.h"
 
@@ -37,10 +44,36 @@ int sockfd;
 
 		roomclient = (int)line[0] - 48;
 
-		printf("Cliente %d no menu %d: %s", getpid()-1, roomclient, textoes);
+		char clienteservidor[MAXLINE];
+		sprintf(clienteservidor,"");
+		strcat(clienteservidor, "Cliente ");
+
+		char idcliente[MAXLINE];
+		sprintf(idcliente, "%d", getpid()-1);
+		strcat(clienteservidor, idcliente);
+
+		strcat(clienteservidor, " no menu ");
+
+		sprintf(idcliente, "%d", roomclient);
+		strcat(clienteservidor, idcliente);
+
+		strcat(clienteservidor, ": ");
+
+		sprintf(idcliente, "%s", textoes);
+		strcat(clienteservidor, idcliente);
 
 		//RESPOSTA DO SERVIDOR
 		points = responseLine(roomclient, linharesult, textoes, sudokuresolver, sudoku, points);
+
+		strcat(clienteservidor, linharesult);
+		printf(clienteservidor);
+
+		//trincofecha
+		int fd = open("servidor", O_WRONLY | O_CREAT | O_APPEND, S_IRUSR | S_IWUSR);
+		write(fd, clienteservidor, strlen(clienteservidor));
+		close(fd);
+		//trincoabre
+
 		roomclient = updateRoom(roomclient, textoes);
 
 		line[0] = roomclient;
