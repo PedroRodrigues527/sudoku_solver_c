@@ -236,10 +236,11 @@ int points;
     {
         strcat(sendline,"Valor ja encontrado ou feito...\n");
     }
-    
+
     return copypoints;
 }
 
+//Verificar se a equipa ja resolveu o sudoku inteiro
 int isFinished(int sudokuresolver[9][9], int fullsudoku[9][9])
 {
     int isfinished = 1;
