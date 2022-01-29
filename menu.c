@@ -90,7 +90,7 @@ int turnojogador;
         //1x1 1
         if(textuser[1] == 'x' && textuser[3] == ' ' && strlen(textuser) == 6)
         {
-            if(isdigit(textuser[0]) && isdigit(textuser[2]) && isdigit(textuser[4]) && textuser[0] != 9 && textuser[2] != 9 && textuser[4] != 0)
+            if(isdigit(textuser[0]) && isdigit(textuser[2]) && isdigit(textuser[4]) && ((int)textuser[0] - 48) != 9 && ((int)textuser[2] - 48) != 9 && ((int)textuser[4] - 48) != 0)
             {
                 // Subtrai 48 porque os digitos na tabela ASCII estão entre 48 e 57, inclusive
                 int numlinha = (int)textuser[0] - 48;
@@ -134,7 +134,7 @@ int turnojogador;
             }
             else
             {
-                strcat (sendline,"Os valores inseridos são invalidos! Insere digitos de acordo com o formato pretendido...\n");
+                strcat (sendline,"Os valores inseridos sao invalidos! Insere digitos de acordo com o formato pretendido...\n");
             }
             print(9, sudokuresolver);
             //pontuacao
@@ -215,11 +215,11 @@ char textuser[MAXLINE];
             strcat(sendline,line);
             //terceiralinha
             fgets(line, MAXLINE, the_file);
-            strcat(sendline,"Pontos total: ");
+            strcat(sendline,"Numero de Pontos Total: ");
             strcat(sendline,line);
             //quartalinha
             fgets(line, MAXLINE, the_file);
-            strcat(sendline,"Numero de tentativas: ");
+            strcat(sendline,"Numero de Tentativas: ");
             strcat(sendline,line);
 
 
