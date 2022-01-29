@@ -1,8 +1,17 @@
+/*
+*   menu.c permite:
+*       - Atualiza o room do jogador;
+*       - Atualiza a string adequando à opção escolhida;
+*/
+
 #include "menu.h"
 #include "sudoku.h"
-
 #define MAXLINE 512
 
+
+/*
+*   Atualiza a variável room dependendo da ação/room anterior
+*/
 int updateRoom(room, sendline)
 int room;
 char *sendline;
@@ -46,6 +55,10 @@ char *sendline;
     return room;
 }
 
+/*
+*   Guarda na variavel sendline a string corresponde a uma ação/opção escolhida
+*   No lado do servidor
+*/
 int responseLine(room, sendline, textuser, sudokuresolver, fullsudoku, points, turnojogador)
 int room;
 char sendline[MAXLINE];
@@ -73,8 +86,6 @@ int turnojogador;
         if(textuser[0] == '2' && strlen(textuser) == 2)
         {
             strcat (sendline,"Escolheu opcao 2...\n");
-            //print the line
-            //strcat (sendline,sendline);
         }
         else if(textuser[0] == '1' && strlen(textuser) == 2)
         {
@@ -136,7 +147,7 @@ int turnojogador;
             {
                 strcat (sendline,"Os valores inseridos sao invalidos! Insere digitos de acordo com o formato pretendido...\n");
             }
-            print(9, sudokuresolver);
+            print(9, sudokuresolver); //Print do sudoku (9 -> numero de linhas/colunas)
             //pontuacao
             char buffer[MAXLINE];
             sprintf(buffer, "Pontos: %d\n", points);
@@ -165,15 +176,14 @@ int turnojogador;
         strcat (sendline,"Isto nao devia acontecer...\n");
         break;
     }
-    //char temp[MAXLINE];
-    //sprintf(temp, "Servidor %d: ", getpid());
-    //strcat(temp, sendline);
-    //sprintf(sendline, temp);
-    //printf("Servidor %d: %s\n", getpid(), sendline);
-    //printf(sendline);
     return points;
 }
 
+/*
+*   Guarda na variavel sendline a string corresponde a uma ação/opção escolhida~
+*   No lado do cliente
+*   Resposta da opção escolhida pelo utilizador
+*/
 int responseLineClient(room, sendline, textuser)
 int room;
 char sendline[MAXLINE];
@@ -266,6 +276,20 @@ char textuser[MAXLINE];
     printf("%s\n",sendline);
 }
 
+/*
+*FICHEIRO dados.txt (Conteúdo)
+*Clientes
+*Desistencias
+*Pontos total
+*Tentatívas
+*/
+
+
+/*
+*   Atualiza o ficheiro dados.txt
+*   Lê o ficheiro de texto e incrementa o numero de clientes (no dados.txt);
+*	dados.txt -> temp; atualiza o ficheiro temporario; renomeia temp para dados.txt;
+*/
 int updateNumberClients(int isIncrem)
 {
     FILE *the_file;
@@ -312,6 +336,9 @@ int updateNumberClients(int isIncrem)
     rename("replace.tmp","dados");
 }
 
+/*
+*   Atualiza o numero de desistencias no ficheiro dados.txt
+*/
 int updateNumberDesistencias()
 {
     FILE *the_file;
@@ -353,6 +380,10 @@ int updateNumberDesistencias()
     rename("replace.tmp","dados");
 }
 
+
+/*
+*   Atualiza o numero de pontos total no ficheiro dados.txt
+*/
 int updatePontosTotal(int numpontos, int increm)
 {
     FILE *the_file;
@@ -404,8 +435,8 @@ int updatePontosTotal(int numpontos, int increm)
     fclose(the_file);
     fclose(temp);
 
+    //renomeia o ficheiro temporário para dados, apanhando o anterior
     remove("dados");
-
     rename("replace.tmp","dados");
 
     return copypontos;

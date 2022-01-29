@@ -3,8 +3,6 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-
-
 #include "sudoku.h"
 #include "menu.h"
 
@@ -16,22 +14,35 @@
 str_echo(sockfd)
 int sockfd;
 {
-	int n, i, roomclient, turnojogador;
-	char line[MAXLINE];
-	char linharesult[MAXLINE];
-	char textoes[MAXLINE];
-	int sudoku[9][9];
-	newBoard(sudoku);
-	int sudokuresolver[9][9];
+	/*
+	* 	n: Tamanho do readline (que recebe do cliente)
+	*	roomclient: Atualiza room, depois envia para o cliente; 
+	*	turnojogador: turno do jogador(thread) para enviar para o cliente;
+	*/
+	int n,roomclient, turnojogador;
+	char line[MAXLINE]; //Linha socket recebida pelo cliente;
+	char linharesult[MAXLINE]; //Incremento da resposta pelo servidor;
+	char textoes[MAXLINE]; //Input do cliente, sem o room e o jogador;
+	int sudoku[9][9]; //Matriz de jogo final;
+
+	newBoard(sudoku); //Cria sudoku final
+	int sudokuresolver[9][9]; //Vai ser resolvido pelo servidor (mostrado ao cliente pelo servidor)
 	int points = 0;
+
+	/*
+	*	1.Preparar sudoku para ser apresentado ao cliente;
+	* 	2.Preenchimento do sudokuresolver completo;
+	*	3.Colocar espaços vazios até 20 posições no máximo;
+	*/
 	int u, v;
     for (u = 0; u < 9; u++)
         for (v = 0; v < 9; v++)
-            sudokuresolver[u][v] = sudoku[u][v];
+            sudokuresolver[u][v] = sudoku[u][v]; //1. 2.
 	
-	emptyBoard(sudokuresolver, 20);
+	emptyBoard(sudokuresolver, 20); //3.
 
 	for (;;) {
+
 		/* Le a primeira linha do socket: os caracteres */
 		n = readline(sockfd, line, MAXLINE);
 		if (n == 0)
@@ -39,60 +50,68 @@ int sockfd;
 		else if (n < 0)
 			err_dump("str_echo: readline error");
 
-		char *texto = line+2; //10asfhskjufbhafk
-		strcpy(textoes, texto);
+		char *texto = line+2; //Incrementar apontador ocultando as 2º posições (o room e o turno do jogador);
+		strcpy(textoes, texto); // textoes = texto (variaveis)
 
-		roomclient = (int)line[0] - 48;
+		//Conversão de ASCII
+		roomclient = (int)line[0] - 48; 
 		turnojogador = (int)line[1] - 48;
 
-		char clienteservidor[MAXLINE];
-		sprintf(clienteservidor,"");
-		strcat(clienteservidor, "Cliente ");
+		/*
+		*	FORMATO: Cliente getpid()-1 no menu roomclient: textoes
+		*/
 
-		char idcliente[MAXLINE];
+		char clienteservidor[MAXLINE]; //Cliente, servidor, resposta do server, resposta da opção
+		sprintf(clienteservidor,""); //clienteservidor = "";
+		strcat(clienteservidor, "Cliente "); //clienteservidor += "Cliente"
+
+		char idcliente[MAXLINE]; //temp para guardar informação
 		sprintf(idcliente, "%d", getpid()-1);
-		strcat(clienteservidor, idcliente);
+		strcat(clienteservidor, idcliente); //clienteservidor += idcliente
 
-		strcat(clienteservidor, " no menu ");
+		strcat(clienteservidor, " no menu "); //clienteservidor += " no menu "
 
 		sprintf(idcliente, "%d", roomclient);
-		strcat(clienteservidor, idcliente);
+		strcat(clienteservidor, idcliente);  //clienteservidor += roomclient
 
-		strcat(clienteservidor, ": ");
+		strcat(clienteservidor, ": ");  //clienteservidor += ": ";
 
 		sprintf(idcliente, "%s", textoes);
-		strcat(clienteservidor, idcliente);
+		strcat(clienteservidor, idcliente); //clienteservidor += textoes
 
 		//RESPOSTA DO SERVIDOR
 		points = responseLine(roomclient, linharesult, textoes, sudokuresolver, sudoku, points, turnojogador);
 
-		strcat(clienteservidor, linharesult);
+		strcat(clienteservidor, linharesult); //clienteservidor += linharesult(resosta conforme a opção)
 
 		//verifycomplete
-		int isover;
-		isover = isFinished(sudokuresolver, sudoku);
+		int isover; //Verifica a conclusão do sudoku
+		isover = isFinished(sudokuresolver, sudoku); //1: acabou; 0: caso contrario
 		if(isover == 1)
 		{
+			//Incrementa o clienteservidor com a string correspondente
 			strcat(clienteservidor,"SUDOKU CONCLUIDO!!\n");
 			sprintf(idcliente, "PONTOS: %d\n", points);
 			strcat(clienteservidor, idcliente);
+
 			//trinco fechar
-			updateNumberClients(0);
+			updateNumberClients(0); //Atualiza os ficheiro dados.txt
 			//trinco abrir
+
 			roomclient = 9;
 		}
 		else
 		{
-			roomclient = updateRoom(roomclient, textoes);
+			roomclient = updateRoom(roomclient, textoes); //Atualiza o room
 		}
 
 		printf(clienteservidor);
 
-		//trincofecha
+		//Fechar trinco
 		int fd = open("servidor", O_WRONLY | O_CREAT | O_APPEND, S_IRUSR | S_IWUSR);
 		write(fd, clienteservidor, strlen(clienteservidor));
 		close(fd);
-		//trincoabre
+		//Abrir trinco
 
 		line[0] = roomclient;
 		line[1] = turnojogador;
@@ -102,21 +121,6 @@ int sockfd;
 		   um caracter! */
 		if (writen(sockfd, line, n) != n)
 			err_dump("str_echo: writen error");
-		
-		
-		/*
-		if(roomclient == 1 && textoes[0] == 49)
-		{
-			if(numberplayers >= 0 && numberplayers < 3)
-			{
-				numberplayers++;
-			}
-			else if(numberplayers >= 3)
-			{
-				printf("Infelizmente, nao pode entrar porque já tem numero de jogadores maximo (3)...\n");
-			}
-		}
-		*/
 
 	}
 }
