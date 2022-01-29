@@ -98,8 +98,6 @@ int sockfd;
 
 			}
 			jogador = (int)status;
-			//printf("depoisjog: %d\n",jogador);
-			//pthread_mutex_destroy(&mutex);
 		}
 
         /* Envia string para sockfd. Note-se que o \0 nao 
