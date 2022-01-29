@@ -3,10 +3,14 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <pthread.h>
+#include <unistd.h>
+
 #include "sudoku.h"
 #include "menu.h"
 
 #define MAXLINE 512
+pthread_mutex_t mutexfile;
 
 /* Servidor do tipo socket stream.
    Manda linhas recebidas de volta para o cliente */
@@ -40,6 +44,8 @@ int sockfd;
             sudokuresolver[u][v] = sudoku[u][v]; //1. 2.
 	
 	emptyBoard(sudokuresolver, 20); //3.
+
+	pthread_mutex_init(&mutexfile, NULL);
 
 	for (;;) {
 
@@ -94,9 +100,9 @@ int sockfd;
 			sprintf(idcliente, "PONTOS: %d\n", points);
 			strcat(clienteservidor, idcliente);
 
-			//trinco fechar
+			pthread_mutex_lock(&mutexfile); //trinco fechar
 			updateNumberClients(0); //Atualiza os ficheiro dados.txt
-			//trinco abrir
+			pthread_mutex_unlock(&mutexfile); //trinco abrir
 
 			roomclient = 9;
 		}
@@ -107,11 +113,11 @@ int sockfd;
 
 		printf(clienteservidor);
 
-		//Fechar trinco
+		pthread_mutex_lock(&mutexfile); //Fechar trinco
 		int fd = open("servidor", O_WRONLY | O_CREAT | O_APPEND, S_IRUSR | S_IWUSR);
 		write(fd, clienteservidor, strlen(clienteservidor));
 		close(fd);
-		//Abrir trinco
+		pthread_mutex_unlock(&mutexfile); //Abrir trinco
 
 		line[0] = roomclient;
 		line[1] = turnojogador;

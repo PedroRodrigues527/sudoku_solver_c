@@ -3,11 +3,15 @@
 *       - Atualiza o room do jogador;
 *       - Atualiza a string adequando à opção escolhida;
 */
+#include <fcntl.h>
+#include <pthread.h>
+#include <unistd.h>
 
 #include "menu.h"
 #include "sudoku.h"
 #define MAXLINE 512
 
+pthread_mutex_t mutexfile;
 
 /*
 *   Atualiza a variável room dependendo da ação/room anterior
@@ -68,7 +72,7 @@ int fullsudoku[9][9];
 int points;
 int turnojogador;
 {
-    //char resultline[MAXLINE];
+    pthread_mutex_init(&mutexfile, NULL);
     sprintf(sendline, "Servidor %d: ", getpid());
     switch (room)
     {
@@ -101,6 +105,18 @@ int turnojogador;
         //1x1 1
         if(textuser[1] == 'x' && textuser[3] == ' ' && strlen(textuser) == 6)
         {
+            if(turnojogador == 1)
+            {
+                strcat (sendline,"Jogador 1 - ");
+            }
+            else if(turnojogador == 2)
+            {
+                strcat (sendline,"Jogador 2 - ");
+            }
+            else if(turnojogador == 0)
+            {
+                strcat (sendline,"Jogador 3 - ");
+            }
             if(isdigit(textuser[0]) && isdigit(textuser[2]) && isdigit(textuser[4]) && ((int)textuser[0] - 48) != 9 && ((int)textuser[2] - 48) != 9 && ((int)textuser[4] - 48) != 0)
             {
                 // Subtrai 48 porque os digitos na tabela ASCII estão entre 48 e 57, inclusive
@@ -158,10 +174,10 @@ int turnojogador;
         {
             strcat (sendline,"Desistindo do Jogo...\n");
             //atualizar dados de desistencia
-            //trinco fechar
+            pthread_mutex_lock(&mutexfile); //trinco fechar
             updateNumberDesistencias();
             updateNumberClients(0);
-            //trinco abrir
+            pthread_mutex_unlock(&mutexfile); //trinco abrir
         }
         else
         {
@@ -189,7 +205,7 @@ int room;
 char sendline[MAXLINE];
 char textuser[MAXLINE];
 {
-    //char resultline[MAXLINE];
+    pthread_mutex_init(&mutexfile, NULL);
     strcpy(sendline, "");
     switch (room)
     {
@@ -207,6 +223,7 @@ char textuser[MAXLINE];
         if(textuser[0] == '2' && strlen(textuser) == 2)
         {
             strcat (sendline,"Escolheu opcao 2...\n");
+            pthread_mutex_lock(&mutexfile); //trinco fechar
             FILE *the_file;
             the_file = fopen("dados", "r");
             if(the_file == NULL)
@@ -236,6 +253,7 @@ char textuser[MAXLINE];
             strcat(sendline,"\n");
 
             fclose(the_file);
+            pthread_mutex_unlock(&mutexfile); //trinco abrir
         }
         else if(textuser[0] == '1' && strlen(textuser) == 2)
         {
@@ -256,7 +274,7 @@ char textuser[MAXLINE];
             }
             else
             {
-                strcat (sendline,"Os valores inseridos são invalidos! Insere digitos de acordo com o formato pretendido...\n");
+                strcat (sendline,"Os valores inseridos sao invalidos! Insere digitos de acordo com o formato pretendido...\n");
             }
         }
         else if(textuser[0] == 'F' && textuser[1] == 'F' && strlen(textuser) == 3)
@@ -277,17 +295,17 @@ char textuser[MAXLINE];
 }
 
 /*
-*FICHEIRO dados.txt (Conteúdo)
+*FICHEIRO dados.txt (Conteudo)
 *Clientes
 *Desistencias
 *Pontos total
-*Tentatívas
+*Tentativas
 */
 
 
 /*
 *   Atualiza o ficheiro dados.txt
-*   Lê o ficheiro de texto e incrementa o numero de clientes (no dados.txt);
+*   Le o ficheiro de texto e incrementa o numero de clientes (no dados.txt);
 *	dados.txt -> temp; atualiza o ficheiro temporario; renomeia temp para dados.txt;
 */
 int updateNumberClients(int isIncrem)

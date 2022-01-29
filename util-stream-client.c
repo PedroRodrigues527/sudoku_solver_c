@@ -8,25 +8,19 @@
 #include "menu.h"
 
 #define MAXLINE 512
-pthread_mutex_t mutex;
+pthread_mutex_t mutex, mutexfile;
 
 //Funções destinada a threads
 void* func1(void *valor){
-	pthread_mutex_lock(&mutex);//Fecha trinco
     return (void *) 1;
-	pthread_mutex_unlock(&mutex);//Abre trinco
 }
 
 void* func2(void *valor){
-	pthread_mutex_lock(&mutex);
     return (void *) 2;
-	pthread_mutex_unlock(&mutex);
 }
 
 void* func3(void *valor){
-	pthread_mutex_lock(&mutex);
     return (void *) 0;
-	pthread_mutex_unlock(&mutex);
 }
 
 
@@ -46,7 +40,10 @@ int sockfd;
 	int jogador = 0; //Verifica o turno da thread (1º(0), 2º(1), 3º(2))
 	void *status; //Recebe return da thread para o jogador;
 
-	//trinco fechar
+	pthread_mutex_init(&mutex, NULL);
+	pthread_mutex_init(&mutexfile, NULL);
+
+	pthread_mutex_lock(&mutexfile); //trinco fechar
 
 	/*
 	*	Lê o ficheiro de texto e incrementa o numero de clientes (no dados.txt);
@@ -54,7 +51,7 @@ int sockfd;
 	*/
 	updateNumberClients(1);
 
-	//trinco abrir
+	pthread_mutex_unlock(&mutexfile); //trinco abrir
 
 
 	printf("CARREGUE EM 'ENTER'\n\n");
@@ -62,42 +59,42 @@ int sockfd;
 	while (fgets(sendline, MAXLINE, fp) != NULL) { //Espera pelo cliente
 		if(room == 2)
 		{
-			pthread_mutex_init(&mutex, NULL);
-			//printf("antesjog: %d\n",jogador);
 			if(jogador == 0)
 			{
-
+				pthread_mutex_lock(&mutex);//Fecha trinco
 				if(pthread_create(&id1, NULL, func1, NULL) != 0)
 				{
 					printf("erro na criacao da tarefa 1\n");
 					exit(1);
 				}
 				pthread_join(id1, &status);
-
+				pthread_mutex_unlock(&mutex);//Abre trinco
 			}
 			else if(jogador == 1)
 			{
-
+				pthread_mutex_lock(&mutex);//Fecha trinco
 				if(pthread_create(&id2, NULL, func2, NULL) != 0)
 				{
 					printf("erro na criacao da tarefa 2\n");
 					exit(1);
 				}
 				pthread_join(id2, &status);
-
+				pthread_mutex_unlock(&mutex);//Abre trinco
 			}
 			else if(jogador == 2)
 			{
-
+				pthread_mutex_lock(&mutex);//Fecha trinco
 				if(pthread_create(&id3, NULL, func3, NULL) != 0)
 				{
 					printf("erro na criacao da tarefa 3\n");
 					exit(1);
 				}
 				pthread_join(id3, &status);
-
+				pthread_mutex_unlock(&mutex);//Abre trinco
 			}
+			pthread_mutex_lock(&mutex);//Fecha trinco
 			jogador = (int)status;
+			pthread_mutex_unlock(&mutex);//Abre trinco
 		}
 
         /* Envia string para sockfd. Note-se que o \0 nao 

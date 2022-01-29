@@ -1,5 +1,11 @@
+#include <fcntl.h>
+#include <pthread.h>
+#include <unistd.h>
+
 #include "sudoku.h"
 #include "menu.h"
+
+pthread_mutex_t mutexfile;
 
 /*
     Hi, this program is a simple algorithm
@@ -169,7 +175,6 @@ void newBoard(int map[9][9])
 void emptyBoard(int copymap[9][9], int emptyspaces)
 {
     srand(time(0));
-    //int copyempspaces = emptyspaces;
 
     int i, j;
     for (i = 0; i < 9; i++)
@@ -203,6 +208,7 @@ int numcoluna;
 int valor;
 int points;
 {
+    pthread_mutex_init(&mutexfile, NULL);
     int copypoints = points;
     if(sudokuresolver[numlinha][numcoluna] == 0)
     {
@@ -212,35 +218,25 @@ int points;
             strcat(sendline,"Valor Correto!\n");
             copypoints += 5;
             //write file to insert totalpoints and tentatives
-            //trinco fechar
+            pthread_mutex_lock(&mutexfile); //trinco fechar
             copypoints = updatePontosTotal(copypoints, 5);
-            //trinco abrir
+            pthread_mutex_unlock(&mutexfile); //trinco abrir
         }
         else
         {
             strcat(sendline,"Valor Incorreto!\n");
             copypoints--;
             //write file to insert totalpoints and tentatives
-            //trinco fechar
+            pthread_mutex_lock(&mutexfile); //trinco fechar
             copypoints = updatePontosTotal(copypoints, -1);
-            //trinco abrir
+            pthread_mutex_unlock(&mutexfile); //trinco abrir
         }
     }
     else
     {
         strcat(sendline,"Valor ja encontrado ou feito...\n");
     }
-
-    // int isover;
-    // isover = isFinished(sudokuresolver, fullsudoku);
-    // if(isover == 0)
-    // {
-    //     strcat(sendline,"SUDOKU CONCLUIDO!!\n");
-    //     //trinco fechar
-    //     updateNumberClients(0);
-    //     //trinco abrir
-    //     exit(1);
-    // }
+    
     return copypoints;
 }
 
