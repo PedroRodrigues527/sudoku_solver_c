@@ -219,7 +219,7 @@ int points;
             copypoints += 5;
             //write file to insert totalpoints and tentatives
             pthread_mutex_lock(&mutexfile); //trinco fechar
-            copypoints = updatePontosTotal(copypoints, 5);
+            updatePontosTotal(copypoints, 5);
             pthread_mutex_unlock(&mutexfile); //trinco abrir
         }
         else
@@ -228,7 +228,7 @@ int points;
             copypoints--;
             //write file to insert totalpoints and tentatives
             pthread_mutex_lock(&mutexfile); //trinco fechar
-            copypoints = updatePontosTotal(copypoints, -1);
+            updatePontosTotal(copypoints, -1);
             pthread_mutex_unlock(&mutexfile); //trinco abrir
         }
     }

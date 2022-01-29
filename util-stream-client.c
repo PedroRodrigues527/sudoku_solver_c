@@ -19,7 +19,7 @@ void* func1(void *p_mystate){
     // XOR multiple values together to get a semi-unique seed
     *mystate = time(NULL) ^ getpid() ^ pthread_self();
 
-	int random = rand_r(mystate) % 3;
+	int random = rand_r(mystate) % 3; //thread safe RNG
     return (void *) random;
 }
 
@@ -36,12 +36,10 @@ int sockfd;
 	int n; //Tamanho da informação que será enviada
 	char sendline[MAXLINE], recvline[MAXLINE+1], linharesultado[MAXLINE]; ////MAXLINE+1 -> devido ao \0; Mostrar opção escolhida (resposta que o cliente mandou)
 	int room = 0; //Indica o menu em que o cliente esta presente
-	//pthread_t id1, id2, id3; //Id das respetivas threads
 	int jogador = 0; //Verifica o turno da thread (1º(0), 2º(1), 3º(2))
 	void *status; //Recebe return da thread para o jogador;
 	int arraytarefas[4];
-	char temp[MAXLINE];
-	pthread_t thread_id[3];
+	pthread_t thread_id[3]; //Id das respetivas threads num array
 
 	pthread_mutex_init(&mutex, NULL);
 	pthread_mutex_init(&mutexfile, NULL);
@@ -64,29 +62,6 @@ int sockfd;
 		if(room == 2)
 		{
 			pthread_mutex_lock(&mutex);//Fecha trinco
-			/*
-			if(pthread_create(&id1, NULL, func1, &state[0]) != 0)
-			{
-				printf("erro na criacao da tarefa 1\n");
-				exit(1);
-			}
-			pthread_join(id1, &status);
-			arraytarefas[0] = (int)status;
-			if(pthread_create(&id2, NULL, func1, &state[1]) != 0)
-			{
-				printf("erro na criacao da tarefa 2\n");
-				exit(1);
-			}
-			pthread_join(id2, &status);
-			arraytarefas[1] = (int)status;
-			if(pthread_create(&id3, NULL, func1, &state[2]) != 0)
-			{
-				printf("erro na criacao da tarefa 3\n");
-				exit(1);
-			}
-			pthread_join(id3, &status);
-			arraytarefas[2] = (int)status;
-			*/
 			int i;
 			for (i = 0; i < 3; i++) {
 				if (pthread_create(&thread_id[i],NULL,func1,(void *)&(state[i]))!=0) {
@@ -94,7 +69,6 @@ int sockfd;
 				exit(1);
 				}
 			}
-
 			for (i = 0; i < 3; i++)
 			{
 				pthread_join (thread_id[i], &status);

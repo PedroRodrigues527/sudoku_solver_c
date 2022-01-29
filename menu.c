@@ -457,5 +457,5 @@ int updatePontosTotal(int numpontos, int increm)
     remove("dados");
     rename("replace.tmp","dados");
 
-    return copypontos;
+    //return copypontos;
 }
