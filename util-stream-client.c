@@ -5,15 +5,16 @@
 #include <fcntl.h>
 #include <pthread.h>
 #include <unistd.h>
-
 #include "menu.h"
+
 #define MAXLINE 512
 pthread_mutex_t mutex;
 
+//Funções destinada a threads
 void* func1(void *valor){
-	pthread_mutex_lock(&mutex);
+	pthread_mutex_lock(&mutex);//Fecha trinco
     return (void *) 1;
-	pthread_mutex_unlock(&mutex);
+	pthread_mutex_unlock(&mutex);//Abre trinco
 }
 
 void* func2(void *valor){
@@ -41,14 +42,18 @@ int sockfd;
 	int n; //Tamanho da informação que será enviada
 	char sendline[MAXLINE], recvline[MAXLINE+1], linharesultado[MAXLINE]; ////MAXLINE+1 -> devido ao \0; Mostrar opção escolhida (resposta que o cliente mandou)
 	int room = 0; //Indica o menu em que o cliente esta presente
-	pthread_t id1, id2, id3;
-	int jogador = 0;
-	void *status;
+	pthread_t id1, id2, id3; //Id das respetivas threads
+	int jogador = 0; //Verifica o turno da thread (1º(0), 2º(1), 3º(2))
+	void *status; //Recebe return da thread para o jogador;
 
-	//ficheiro de texto - adicionar +1 a num clientes no ficheiro 'dados'
-	//ler inteiro do ficheiro (primeira linha - numclientes)
 	//trinco fechar
+
+	/*
+	*	Lê o ficheiro de texto e incrementa o numero de clientes (no dados.txt);
+	*	dados.txt -> temp; atualiza o ficheiro temporario; renomeia temp para dados.txt;
+	*/
 	updateNumberClients(1);
+
 	//trinco abrir
 
 
@@ -102,15 +107,11 @@ int sockfd;
 		
 		char fullstring[MAXLINE]; //room + texto que o cliente inseriu (room + sendline)
 		sprintf(fullstring, "%d%d", room, jogador); //Sprintf: Adicionar a variavel informação
-		//char outrostring[MAXLINE];
-		//sprintf(outrostring, "%d", jogador); //Sprintf: Adicionar a variavel informação
-		//strcat(fullstring, outrostring);
+
 		strcat(fullstring, sendline);
 		n = strlen(fullstring);
 		if (writen(sockfd, fullstring, n) != n) //Verifica se o socket foi enviado com sucesso
 			err_dump("str_cli: writen error on socket");
-		
-		//printf(fullstring);
 		
 		/* Tenta ler string de sockfd. Note-se que tem de 
 		   terminar a string com \0 */
@@ -118,17 +119,16 @@ int sockfd;
 		n = readline(sockfd, recvline, MAXLINE);  //Ler linha recebida pelo servidor
 		if (n<0)
 			err_dump("str_cli:readline error");
-		recvline[n] = 0; //Ultimo caracter vazi
-		//printf("5");
-		/* Envia a string para stdout */
-		//printf("%s", recvline);
+		recvline[n] = 0; //Ultimo caracter vazio
+
+		/* Envia a string para stdout */	
 		fputs(recvline, stdout); //Mostrar no ecrã receive line
 		responseLineClient(room, linharesultado, sendline); //Responder resposta client-side
 		
 		printf("\n\n");
 		
-		room = (int)recvline[0];
-		jogador = (int)recvline[1];
+		room = (int)recvline[0]; //1º posição -> atualização do quarto
+		jogador = (int)recvline[1]; //2º posição -> atualização do turno(do jogador em questão- qual thread a jogar)
 		switch (room)
 		{
 		case 0:
@@ -155,16 +155,16 @@ int sockfd;
 			}
 			break;
 		case 8:
-			//desistir o cliente
+			//Verifica a desistência do cliente
             if (0 == kill(getpid(), 0))
             {
                 // Process exists.
 				printf("DESISTIU\n");
-				pthread_mutex_destroy(&mutex);
+				pthread_mutex_destroy(&mutex); //Destroi todos os trincos
                 exit(1);
             }
 		case 9:
-			//desistir o cliente
+			//Verifica a conclusão do sudoku
             if (0 == kill(getpid(), 0))
             {
                 // Process exists.
