@@ -36,7 +36,7 @@ int sockfd;
 	/*
 	*	1.Preparar sudoku para ser apresentado ao cliente;
 	* 	2.Preenchimento do sudokuresolver completo;
-	*	3.Colocar espaços vazios até 20 posições no máximo;
+	*	3.Colocar espacos vazios ate 20 posicoes no maximo;
 	*/
 	int u, v;
     for (u = 0; u < 9; u++)
@@ -56,10 +56,10 @@ int sockfd;
 		else if (n < 0)
 			err_dump("str_echo: readline error");
 
-		char *texto = line+2; //Incrementar apontador ocultando as 2º posições (o room e o turno do jogador);
+		char *texto = line+2; //Incrementar apontador ocultando as 2º posicoes (o room e o turno do jogador);
 		strcpy(textoes, texto); // textoes = texto (variaveis)
 
-		//Conversão de ASCII
+		//Conversao de ASCII
 		roomclient = (int)line[0] - 48; 
 		turnojogador = (int)line[1] - 48;
 
@@ -67,11 +67,11 @@ int sockfd;
 		*	FORMATO: Cliente getpid()-1 no menu roomclient: textoes
 		*/
 
-		char clienteservidor[MAXLINE]; //Cliente, servidor, resposta do server, resposta da opção
+		char clienteservidor[MAXLINE]; //Cliente, servidor, resposta do server, resposta da opcao
 		sprintf(clienteservidor,""); //clienteservidor = "";
 		strcat(clienteservidor, "Cliente "); //clienteservidor += "Cliente"
 
-		char idcliente[MAXLINE]; //temp para guardar informação
+		char idcliente[MAXLINE]; //temp para guardar informacao
 		sprintf(idcliente, "%d", getpid()-1);
 		strcat(clienteservidor, idcliente); //clienteservidor += idcliente
 
@@ -88,10 +88,10 @@ int sockfd;
 		//RESPOSTA DO SERVIDOR
 		points = responseLine(roomclient, linharesult, textoes, sudokuresolver, sudoku, points, turnojogador);
 
-		strcat(clienteservidor, linharesult); //clienteservidor += linharesult(resosta conforme a opção)
+		strcat(clienteservidor, linharesult); //clienteservidor += linharesult(resosta conforme a opcao)
 
 		//verifycomplete
-		int isover; //Verifica a conclusão do sudoku
+		int isover; //Verifica a conclusao do sudoku
 		isover = isFinished(sudokuresolver, sudoku); //1: acabou; 0: caso contrario
 		if(isover == 1)
 		{
@@ -123,7 +123,7 @@ int sockfd;
 		line[1] = turnojogador;
 
 		/* Manda linha de volta para o socket. n conta com
-		   o \0 da string, caso contr�rio perdia-se sempre 
+		   o \0 da string, caso contrario perdia-se sempre 
 		   um caracter! */
 		if (writen(sockfd, line, n) != n)
 			err_dump("str_echo: writen error");

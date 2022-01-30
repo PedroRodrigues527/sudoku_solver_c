@@ -22,10 +22,10 @@ main(void)
 	serv_addr.sun_family = AF_UNIX;
 	strcpy(serv_addr.sun_path, UNIXSTR_PATH);
 
-      /* O servidor ‰ quem cria o ficheiro que identifica o socket.
+      /* O servidor   quem cria o ficheiro que identifica o socket.
          Elimina o ficheiro, para o caso de algo ter ficado pendurado.
          Em seguida associa o socket ao ficheiro. 
-         A dimensƒo a indicar ao bind nƒo ‰ a da estrutura, pois depende
+         A dimens o a indicar ao bind n o   a da estrutura, pois depende
          do nome do ficheiro */
 
 	servlen = strlen(serv_addr.sun_path) + sizeof(serv_addr.sun_family);
@@ -39,9 +39,9 @@ main(void)
 
 	for (;;) {
 
-		/* Nƒo esquecer que quando o servidor aceita um cliente cria um
+		/* N o esquecer que quando o servidor aceita um cliente cria um
 		   socket para comunicar com ele. O primeiro socket (sockfd) fica 
-		   € espera de mais clientes */
+		     espera de mais clientes */
 
 		clilen = sizeof(cli_addr);
 		newsockfd = accept(sockfd, (struct sockaddr *) &cli_addr,
@@ -49,7 +49,7 @@ main(void)
 		if (newsockfd < 0)
 			err_dump("server: accept error");
 
-		/* Lan‡a processo filho para lidar com o cliente */
+		/* Lan a processo filho para lidar com o cliente */
 
 		if ((childpid = fork()) < 0)
 			err_dump("server: fork error");
@@ -57,9 +57,9 @@ main(void)
 		else if (childpid == 0) {
 
 			/* Processo filho que vai atender o cliente. 
-			   Fechar sockfd ‰ sanitßrio, jß que nƒo ‰
+			   Fechar sockfd   sanit rio, j  que n o  
 			   utilizado pelo processo filho.
-			   Os dados recebidos do cliente sƒo reenviados 
+			   Os dados recebidos do cliente s o reenviados 
 			   para o cliente */
 
 			close(sockfd);
@@ -68,7 +68,7 @@ main(void)
 		}
 
 		/* Processo pai.
-		   Fechar newsockfd ‰ sanitßrio, jß que nƒo ‰
+		   Fechar newsockfd   sanit rio, j  que n o  
 		   utilizado pelo processo pai */
 
 		close(newsockfd);
