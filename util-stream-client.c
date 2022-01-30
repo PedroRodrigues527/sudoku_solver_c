@@ -23,7 +23,15 @@ void* func1(void *p_mystate){
     return (void *) random;
 }
 
+void* func2(void *p_mystate){
 
+	unsigned int *mystate = p_mystate;
+    // XOR multiple values together to get a semi-unique seed
+    *mystate = time(NULL) ^ getpid() ^ pthread_self();
+
+	int random = rand_r(mystate) % 9 + 1; //thread safe RNG
+    return (void *) random;
+}
 
 /* Cliente do tipo socket stream.
    Le string de fp e envia para sockfd.
@@ -64,9 +72,19 @@ int sockfd;
 			pthread_mutex_lock(&mutex);//Fecha trinco
 			int i;
 			for (i = 0; i < 3; i++) {
-				if (pthread_create(&thread_id[i],NULL,func1,(void *)&(state[i]))!=0) {
-				printf("erro na criacao da tarefa\n");
-				exit(1);
+				if(i == 2)
+				{
+					if (pthread_create(&thread_id[i],NULL,func2,(void *)&(state[i]))!=0) {
+						printf("erro na criacao da tarefa\n");
+						exit(1);
+					}
+				}
+				else
+				{
+					if (pthread_create(&thread_id[i],NULL,func1,(void *)&(state[i]))!=0) {
+						printf("erro na criacao da tarefa\n");
+						exit(1);
+					}
 				}
 			}
 			for (i = 0; i < 3; i++)
@@ -83,14 +101,12 @@ int sockfd;
 			{
 				arraytarefas[0] += 3;
 				arraytarefas[1] += 3;
-				arraytarefas[2] += 3;
 				arraytarefas[3] = 2;
 			}
 			else if(jogador == 2)
 			{
 				arraytarefas[0] += 6;
 				arraytarefas[1] += 6;
-				arraytarefas[2] += 6;
 				arraytarefas[3] = 0;
 			}
 			jogador = arraytarefas[3];
@@ -103,7 +119,7 @@ int sockfd;
 		char fullstring[MAXLINE]; //room + texto que o cliente inseriu (room + sendline)
 		if(room == 2 && strlen(sendline) == 1)
 		{
-			sprintf(fullstring, "%d%d%dx%d %d", room, jogador, arraytarefas[0], arraytarefas[1], arraytarefas[2] + 1);
+			sprintf(fullstring, "%d%d%dx%d %d", room, jogador, arraytarefas[0], arraytarefas[1], arraytarefas[2]);
 		}
 		else
 		{
