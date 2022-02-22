@@ -1,4 +1,6 @@
 # Operative-System-Unix
-Construido sobre GNU/Linux Debian
+Build on top of GNU/Linux Debian
 
-Projeto Unidade Curricular Sistemas Operativos, Universidade da Madeira
+Project related to the subject: Operative System, Universidade da Madeira (UMa)
+
+Build by: João Cupido, Pedro Rodrigues, Diogo Santos;
